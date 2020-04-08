@@ -54,6 +54,8 @@ public class Game extends ApplicationAdapter {
 		drone.width = 64;
 		drone.height = 64;
 
+		
+
 	}
 
 	@Override
