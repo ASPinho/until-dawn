@@ -8,6 +8,7 @@ import academia.tilldawn.Game;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
 		config.title = "Game";
 		config.width = Utilities.VIEWPORT_WIDTH;
 		config.height = Utilities.VIEWPORT_HEIGHT;

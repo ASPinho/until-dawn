@@ -3,6 +3,7 @@ package academia.tilldawn;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -26,7 +28,7 @@ import static academia.tilldawn.Utilities.*;
 import java.util.Iterator;
 
 
-public class Game extends ApplicationAdapter {
+public class Game extends com.badlogic.gdx.Game {
 
 	private TextureRegion background;
 
@@ -43,6 +45,7 @@ public class Game extends ApplicationAdapter {
 	private int score;
 	private String yourScoreName;
 	BitmapFont yourBitmapFontName;
+
 
 
 	
