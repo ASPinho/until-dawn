@@ -10,6 +10,6 @@ public class Utilities {
     public static final int VIEWPORT_WIDTH = 1200;
     public static final int VIEWPORT_HEIGHT = 660;
 
-    public static final int PICTURE_SIZE = 64;
+    public static final int PICTURE_SIZE = 32;
 
 }
