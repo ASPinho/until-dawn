@@ -13,8 +13,8 @@ public class EvilDrone {
         this.rectangle = new Rectangle();
         rectangle.x = 1200;
         rectangle.y = 600;
-        rectangle.width = 64;
-        rectangle.height = 64;
+        rectangle.width = Utilities.PICTURE_SIZE;
+        rectangle.height = Utilities.PICTURE_SIZE;
         this.player = player;
     }
 
@@ -26,20 +26,20 @@ public class EvilDrone {
 
         switch (checkHorizontalDirection()){
             case LEFT:
-                rectangle.x -= 250 * Gdx.graphics.getDeltaTime();
+                rectangle.x -= Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
 
             case RIGHT:
-                rectangle.x += 250 * Gdx.graphics.getDeltaTime();
+                rectangle.x += Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
         }
 
         switch (checkVerticalDirection()){
             case DOWN:
-                rectangle.y -= 250 * Gdx.graphics.getDeltaTime();
+                rectangle.y -= Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
             case UP:
-                rectangle.y += 250 * Gdx.graphics.getDeltaTime();
+                rectangle.y += Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
         }
 
     }
