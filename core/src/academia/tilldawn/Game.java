@@ -42,11 +42,14 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 
 	private long lastDropTime;
-
-
-	private int score;
 	private String yourScoreName;
 	private BitmapFont yourBitmapFontName;
+	private BitmapFont hp;
+
+
+
+
+
 
 
 	
@@ -74,10 +77,11 @@ public class Game extends ApplicationAdapter {
 
 		evilDrones = new Array<EvilDrone>();
 
+
 		beacon = new Beacon(camera);
 
-		score = 0;
-		yourScoreName = "score: 0";
+		yourScoreName = "SCORE: 0";
+		hp = new BitmapFont();
 		yourBitmapFontName = new BitmapFont();
 
 	}
@@ -95,7 +99,10 @@ public class Game extends ApplicationAdapter {
 		batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
 		yourBitmapFontName.setColor(Color.GREEN);
-		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20 , camera.position.y + VIEWPORT_HEIGHT/2 - 20);
+		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
+		hp.setColor(Color.GREEN);
+		hp.draw(batch,"HEALTH: 100", camera.position.x + VIEWPORT_WIDTH/2 - 150, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
+
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
 		for(EvilDrone raindrop: evilDrones) {
