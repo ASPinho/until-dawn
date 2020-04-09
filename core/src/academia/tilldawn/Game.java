@@ -18,9 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-
-import java.awt.*;
-
 import static academia.tilldawn.Utilities.*;
 
 import java.util.Iterator;
@@ -45,13 +42,6 @@ public class Game extends ApplicationAdapter {
 	private String yourScoreName;
 	private BitmapFont yourBitmapFontName;
 	private BitmapFont hp;
-
-
-
-
-
-
-
 	
 	@Override
 	public void create () {
@@ -76,14 +66,11 @@ public class Game extends ApplicationAdapter {
         drone.height = PICTURE_SIZE;
 
 		evilDrones = new Array<EvilDrone>();
-
-
 		beacon = new Beacon(camera);
 
 		yourScoreName = "SCORE: 0";
 		hp = new BitmapFont();
 		yourBitmapFontName = new BitmapFont();
-
 	}
 
 
@@ -102,7 +89,6 @@ public class Game extends ApplicationAdapter {
 		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
 		hp.setColor(Color.GREEN);
 		hp.draw(batch,"HEALTH: 100", camera.position.x + VIEWPORT_WIDTH/2 - 150, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
-
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
 		for(EvilDrone raindrop: evilDrones) {
@@ -139,8 +125,6 @@ public class Game extends ApplicationAdapter {
 		if (drone.y < 0) drone.y = 0;
 		if (drone.y > BACKGROUND_HEIGHT - 64) drone.y = BACKGROUND_HEIGHT - 64;
 
-
-
 		//move camera horizontally
 		if (drone.x > VIEWPORT_WIDTH/2 - PICTURE_SIZE/2 && drone.x < (BACKGROUND_WIDTH - VIEWPORT_WIDTH/2) - PICTURE_SIZE/2) {
 			camera.position.set(drone.getX() + PICTURE_SIZE/2, camera.position.y, 0);
@@ -152,7 +136,6 @@ public class Game extends ApplicationAdapter {
 		}
 
 		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
-
 	}
 
 	@Override
@@ -161,13 +144,9 @@ public class Game extends ApplicationAdapter {
 		evilDronePic.dispose();
 		dronePic.dispose();
 		batch.dispose();
-
 	}
 
 	private void drawScore(){
-
-
-
 
 	}
 
@@ -181,6 +160,4 @@ public class Game extends ApplicationAdapter {
 		evilDrones.add(evilDrone);
 		lastDropTime = TimeUtils.nanoTime();
 	}
-
-
 }
