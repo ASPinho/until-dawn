@@ -12,5 +12,6 @@ public class DesktopLauncher {
 		config.width = Utilities.VIEWPORT_WIDTH;
 		config.height = Utilities.VIEWPORT_HEIGHT;
 		new LwjglApplication(new Game(), config);
+
 	}
 }
