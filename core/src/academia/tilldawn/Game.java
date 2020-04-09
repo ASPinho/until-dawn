@@ -40,9 +40,10 @@ public class Game extends ApplicationAdapter {
 
 	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
-	private int score;
 	private String yourScoreName;
-	BitmapFont yourBitmapFontName;
+	private BitmapFont yourBitmapFontName;
+
+
 
 
 	
@@ -69,7 +70,7 @@ public class Game extends ApplicationAdapter {
 
 		evilDrones = new Array<EvilDrone>();
 
-		score = 0;
+
 		yourScoreName = "score: 0";
 		yourBitmapFontName = new BitmapFont();
 
@@ -101,7 +102,8 @@ public class Game extends ApplicationAdapter {
 
 		
 		yourBitmapFontName.setColor(Color.GREEN);
-		yourBitmapFontName.draw(batch, yourScoreName, 25, 100);
+		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
+
 
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
