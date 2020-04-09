@@ -3,6 +3,7 @@ package academia.tilldawn;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,9 +13,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
+
+import java.awt.*;
 
 import static academia.tilldawn.Utilities.*;
 
@@ -35,6 +40,10 @@ public class Game extends ApplicationAdapter {
 
 	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
+
+	private int score;
+	private String yourScoreName;
+	BitmapFont yourBitmapFontName;
 
 
 	
@@ -63,6 +72,12 @@ public class Game extends ApplicationAdapter {
 
 		evilDrones = new Array<EvilDrone>();
 
+		score = 0;
+		yourScoreName = "score: 0";
+		yourBitmapFontName = new BitmapFont();
+
+
+
 	}
 
 
@@ -78,6 +93,11 @@ public class Game extends ApplicationAdapter {
 
 
 		batch.draw(dronePic, drone.x, drone.y);
+
+		
+		yourBitmapFontName.setColor(Color.GREEN);
+		yourBitmapFontName.draw(batch, yourScoreName, 25, 100);
+
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
 		for(EvilDrone raindrop: evilDrones) {
