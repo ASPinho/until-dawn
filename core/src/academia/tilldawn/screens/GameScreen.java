@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        targetPic = new Texture(Gdx.files.internal("toillete.png"));
+        targetPic = new Texture(Gdx.files.internal("unnamed.png"));
 
         camera = new OrthographicCamera();
 
@@ -83,10 +83,10 @@ public class GameScreen implements Screen {
         drone.height = PICTURE_SIZE;
 
         target = new Rectangle();
-        target.x = PICTURE_SIZE * 25;
-        target.y = BACKGROUND_HEIGHT / 2 - PICTURE_SIZE * 50;
-        target.width = PICTURE_SIZE;
-        target.height = PICTURE_SIZE;
+        target.x = BACKGROUND_WIDTH - 800;
+        target.y = BACKGROUND_HEIGHT - 800;
+        target.width = 200;
+        target.height = 200;
 
 
         evilDrones = new Array<EvilDrone>();
