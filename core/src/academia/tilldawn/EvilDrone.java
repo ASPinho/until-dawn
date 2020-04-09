@@ -26,20 +26,20 @@ public class EvilDrone {
 
         switch (checkHorizontalDirection()){
             case LEFT:
-                rectangle.x -= 250 * Gdx.graphics.getDeltaTime();
+                rectangle.x -= Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
 
             case RIGHT:
-                rectangle.x += 250 * Gdx.graphics.getDeltaTime();
+                rectangle.x += Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
         }
 
         switch (checkVerticalDirection()){
             case DOWN:
-                rectangle.y -= 250 * Gdx.graphics.getDeltaTime();
+                rectangle.y -= Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
                 break;
             case UP:
-                rectangle.y += 250 * Gdx.graphics.getDeltaTime();
+                rectangle.y += Utilities.ENEMY_SPEED * Gdx.graphics.getDeltaTime();
         }
 
     }

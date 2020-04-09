@@ -40,6 +40,7 @@ public class Game extends ApplicationAdapter {
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private Sprite arrow;
 
 	private long lastDropTime;
 	private String yourScoreName;
@@ -56,6 +57,7 @@ public class Game extends ApplicationAdapter {
 		beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
 		targetPic = new Texture(Gdx.files.internal("toillete.png"));
 
+
 		camera = new OrthographicCamera();
 
 		camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -69,15 +71,18 @@ public class Game extends ApplicationAdapter {
 		drone.width = PICTURE_SIZE;
 		drone.height = PICTURE_SIZE;
 
+    //target
 		target = new Rectangle();
 		target.x = PICTURE_SIZE*25;
 		target.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE*50;
 		target.width = PICTURE_SIZE;
 		target.height = PICTURE_SIZE;
-
+    //target
 
 		evilDrones = new Array<EvilDrone>();
 		beacon = new Beacon(camera);
+
+		arrow = new Sprite(beaconPic, (int)beacon.getX(), (int)beacon.getY());
 
 		yourScoreName = "SCORE: 0";
 		hp = new BitmapFont();
@@ -96,6 +101,8 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0,0 );
 		batch.draw(dronePic, drone.x, drone.y);
+
+    //target
 		batch.draw(targetPic, target.x, target.y);
 
 
@@ -117,8 +124,7 @@ public class Game extends ApplicationAdapter {
 
 
 		arrow.draw(batch);
-
-
+    //target
 
 		yourBitmapFontName.setColor(Color.GREEN);
 		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
