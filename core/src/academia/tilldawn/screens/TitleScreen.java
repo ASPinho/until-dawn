@@ -25,7 +25,22 @@ public class TitleScreen implements Screen {
         title.setAlignment(Align.center);
         title.setY(Gdx.graphics.getHeight()*2/3);
         title.setWidth(Gdx.graphics.getWidth());
+        title.setFontScale(2.0f);
         stage.addActor(title);
+
+        Label instructions = new Label("The blue arrow indicates the way.", skin);
+        instructions.setAlignment(Align.center);
+        instructions.setY((Gdx.graphics.getHeight()*2/3) -250);
+        instructions.setWidth(Gdx.graphics.getWidth());
+        instructions.setFontScale(1.5f);
+        stage.addActor(instructions);
+
+        Label instructions2 = new Label("Use Arrow Keys or WASD to move", skin);
+        instructions2.setAlignment(Align.center);
+        instructions2.setY((Gdx.graphics.getHeight()*2/3) -350);
+        instructions2.setWidth(Gdx.graphics.getWidth());
+        instructions2.setFontScale(1.5f);
+        stage.addActor(instructions2);
 
         TextButton playButton = new TextButton("Play!", skin);
         playButton.setWidth(Gdx.graphics.getWidth()/2);
@@ -44,20 +59,20 @@ public class TitleScreen implements Screen {
 
         stage.addActor(playButton);
 
-        TextButton optionsButton = new TextButton("Options",skin);
-        optionsButton.setWidth(Gdx.graphics.getWidth()/2);
-        optionsButton.setPosition(Gdx.graphics.getWidth()/2-optionsButton.getWidth()/2,Gdx.graphics.getHeight()/4-optionsButton.getHeight()/2);
-        optionsButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new OptionScreen(game, skin));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(optionsButton);
+//        TextButton optionsButton = new TextButton("Options",skin);
+//        optionsButton.setWidth(Gdx.graphics.getWidth()/2);
+//        optionsButton.setPosition(Gdx.graphics.getWidth()/2-optionsButton.getWidth()/2,Gdx.graphics.getHeight()/4-optionsButton.getHeight()/2);
+//        optionsButton.addListener(new InputListener(){
+//            @Override
+//            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+//                game.setScreen(new WinScreen(game, skin));
+//            }
+//            @Override
+//            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//                return true;
+//            }
+//        });
+//        stage.addActor(optionsButton);
 
     }
 
