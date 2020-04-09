@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,6 +35,8 @@ public class Game extends ApplicationAdapter {
 
 	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
+
+
 	
 	@Override
 	public void create () {
@@ -49,6 +52,8 @@ public class Game extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 
+
+
 		// starts Player Drone logic position
 		drone = new Rectangle();
 		drone.x = PICTURE_SIZE*2;
@@ -60,17 +65,6 @@ public class Game extends ApplicationAdapter {
 
 	}
 
-	private void spawnRaindrop() {
-
-		if (evilDrones.size >= 5) {
-			return;
-		}
-
-		EvilDrone evilDrone = new EvilDrone(drone);
-		evilDrones.add(evilDrone);
-		lastDropTime = TimeUtils.nanoTime();
-	}
-
 
 	@Override
 	public void render () {
@@ -80,6 +74,9 @@ public class Game extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, 0,0 );
+
+
+
 		batch.draw(dronePic, drone.x, drone.y);
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
@@ -132,7 +129,7 @@ public class Game extends ApplicationAdapter {
 		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 
@@ -140,6 +137,24 @@ public class Game extends ApplicationAdapter {
 		dronePic.dispose();
 		batch.dispose();
 
+	}
+
+	private void drawScore(){
+
+
+
+
+	}
+
+	private void spawnRaindrop() {
+
+		if (evilDrones.size >= 5) {
+			return;
+		}
+
+		EvilDrone evilDrone = new EvilDrone(drone);
+		evilDrones.add(evilDrone);
+		lastDropTime = TimeUtils.nanoTime();
 	}
 
 
