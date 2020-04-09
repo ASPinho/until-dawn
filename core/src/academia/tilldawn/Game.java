@@ -32,16 +32,22 @@ public class Game extends ApplicationAdapter {
 
 	private Texture dronePic;
 	private Texture evilDronePic;
+	private Texture beaconPic;
 
 	private Rectangle drone;
+	private Array<EvilDrone> evilDrones;
+	private Beacon beacon;
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 
-	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
 	private String yourScoreName;
 	private BitmapFont yourBitmapFontName;
+	private BitmapFont hp;
+
+
+
 
 
 
@@ -52,8 +58,9 @@ public class Game extends ApplicationAdapter {
 
 		// starts graphic representations
 		background = new TextureRegion(new Texture("map-bkg.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-		dronePic = new Texture(Gdx.files.internal("drone.png"));
-		evilDronePic = new Texture(Gdx.files.internal("evil-drone.png"));
+		dronePic = new Texture(Gdx.files.internal("drone2-32.png"));
+		evilDronePic = new Texture(Gdx.files.internal("corones.png"));
+		beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
 
 		camera = new OrthographicCamera();
 
@@ -64,29 +71,19 @@ public class Game extends ApplicationAdapter {
 		// starts Player Drone logic position
 		drone = new Rectangle();
 		drone.x = PICTURE_SIZE*2;
-		drone.y = BACKGROUND_HEIGHT/2 - 64/2;
+		drone.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE/2;
 		drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
 		evilDrones = new Array<EvilDrone>();
 
 
-		yourScoreName = "score: 0";
+		beacon = new Beacon(camera);
+
+		yourScoreName = "SCORE: 0";
+		hp = new BitmapFont();
 		yourBitmapFontName = new BitmapFont();
 
-
-
-	}
-
-	private void spawnRaindrop() {
-
-		if (evilDrones.size >= 5) {
-			return;
-		}
-
-		EvilDrone evilDrone = new EvilDrone(drone);
-		evilDrones.add(evilDrone);
-		lastDropTime = TimeUtils.nanoTime();
 	}
 
 
@@ -99,11 +96,12 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0,0 );
 		batch.draw(dronePic, drone.x, drone.y);
+		batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
-		
 		yourBitmapFontName.setColor(Color.GREEN);
 		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
-
+		hp.setColor(Color.GREEN);
+		hp.draw(batch,"HEALTH: 100", camera.position.x + VIEWPORT_WIDTH/2 - 150, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
 
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
@@ -156,7 +154,7 @@ public class Game extends ApplicationAdapter {
 		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 
@@ -164,6 +162,24 @@ public class Game extends ApplicationAdapter {
 		dronePic.dispose();
 		batch.dispose();
 
+	}
+
+	private void drawScore(){
+
+
+
+
+	}
+
+	private void spawnRaindrop() {
+
+		if (evilDrones.size >= 5) {
+			return;
+		}
+
+		EvilDrone evilDrone = new EvilDrone(drone);
+		evilDrones.add(evilDrone);
+		lastDropTime = TimeUtils.nanoTime();
 	}
 
 

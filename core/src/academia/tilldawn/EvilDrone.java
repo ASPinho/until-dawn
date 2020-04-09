@@ -13,8 +13,8 @@ public class EvilDrone {
         this.rectangle = new Rectangle();
         rectangle.x = 1200;
         rectangle.y = 600;
-        rectangle.width = 64;
-        rectangle.height = 64;
+        rectangle.width = Utilities.PICTURE_SIZE;
+        rectangle.height = Utilities.PICTURE_SIZE;
         this.player = player;
     }
 
