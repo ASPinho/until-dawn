@@ -22,20 +22,13 @@ public class Game extends ApplicationAdapter {
 
 	private TextureRegion background;
 
-
 	private Texture dronePic;
 	private Texture evilDronePic;
 
 	private Rectangle drone;
 
-	private Rectangle evilDrone;
-
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-
-
-
-
 
 	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
@@ -50,13 +43,9 @@ public class Game extends ApplicationAdapter {
 
 		camera = new OrthographicCamera();
 
-
 		camera.setToOrtho(false, 1200, 800);
 
 		batch = new SpriteBatch();
-
-
-
 
 		// starts Player Drone logic position
 		drone = new Rectangle();
@@ -65,23 +54,14 @@ public class Game extends ApplicationAdapter {
 		drone.width = 64;
         drone.height = 64;
 
-		// starts Enemy Drone logic position
-		evilDrone = new Rectangle();
-		evilDrone.x = 1200;
-		evilDrone.y = 600;
-		evilDrone.width = 64;
-		evilDrone.height = 64;
-
 		evilDrones = new Array<EvilDrone>();
-		spawnRaindrop();
 
 	}
 
 	private void spawnRaindrop() {
 
-		EvilDrone evilDrone2 = new EvilDrone(drone);
-
-		evilDrones.add(evilDrone2);
+		EvilDrone evilDrone = new EvilDrone(drone);
+		evilDrones.add(evilDrone);
 		lastDropTime = TimeUtils.nanoTime();
 
 	}
@@ -90,33 +70,19 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-/*
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, 0,0 );
 		batch.draw(dronePic, drone.x, drone.y);
-		batch.draw(evilDronePic, evilDrone.x, evilDrone.y);
 
-
+		// draws EvilDrones in position and moves them towards PlayerDrone;
 		for(EvilDrone raindrop: evilDrones) {
 			batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
 			raindrop.moveTowardsPlayer();
 		}
-
-
-
 		batch.end();
-
-		/*
-		if (Gdx.input.isTouched()){
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			camera.unproject(touchPos);
-			drone.x = touchPos.x - 64/2;
-		}*/
 
 		// Player move left
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -146,7 +112,6 @@ public class Game extends ApplicationAdapter {
 		if (drone.y < 0) drone.y = 0;
 		if (drone.y > 800 - 64) drone.y = 800 - 64;
 
-		//moveTowardsPlayer();
 
 
 		//move camera horizontally
