@@ -39,7 +39,7 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 
 		// starts graphic representations
-		background = new TextureRegion(new Texture("map-bkg.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+		background = new TextureRegion(new Texture("background.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 		dronePic = new Texture(Gdx.files.internal("drone.png"));
 		evilDronePic = new Texture(Gdx.files.internal("evil-drone.png"));
 
