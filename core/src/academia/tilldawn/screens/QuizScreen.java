@@ -1,4 +1,5 @@
 package academia.tilldawn.screens;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,26 +13,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class TitleScreen implements Screen {
-
+public class QuizScreen implements Screen {
     private Stage stage;
     private Game game;
 
-    public TitleScreen(final Game game, final Skin skin) {
+    public QuizScreen(final Game game, final Skin skin) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
 
-        Label title = new Label("Until Dawn", skin);
+        Label title = new Label("Quiz Time!", skin);
         title.setAlignment(Align.center);
-        title.setY(Gdx.graphics.getHeight()*2/3);
+        title.setY(Gdx.graphics.getHeight() * 8/9);
         title.setWidth(Gdx.graphics.getWidth());
-        stage.addActor(title);
+        title.setFontScale(2,2);
 
-        TextButton playButton = new TextButton("Play!", skin);
-        playButton.setWidth(Gdx.graphics.getWidth()/2);
-        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/2-playButton.getHeight()/2);
+        TextButton option1 = new TextButton("Play!", skin);
+        option1.setWidth(Gdx.graphics.getWidth()/2);
+        option1.setPosition(Gdx.graphics.getWidth()/2-option1.getWidth()/2,Gdx.graphics.getHeight()/2-option1.getHeight()/2);
 
-        playButton.addListener(new InputListener() {
+        option1.addListener(new InputListener(){
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(game));
@@ -42,11 +42,13 @@ public class TitleScreen implements Screen {
             }
         });
 
-        stage.addActor(playButton);
+        stage.addActor(title);
+        stage.addActor(option1);
 
         TextButton optionsButton = new TextButton("Options",skin);
         optionsButton.setWidth(Gdx.graphics.getWidth()/2);
         optionsButton.setPosition(Gdx.graphics.getWidth()/2-optionsButton.getWidth()/2,Gdx.graphics.getHeight()/4-optionsButton.getHeight()/2);
+
         optionsButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -57,6 +59,7 @@ public class TitleScreen implements Screen {
                 return true;
             }
         });
+
         stage.addActor(optionsButton);
 
     }
