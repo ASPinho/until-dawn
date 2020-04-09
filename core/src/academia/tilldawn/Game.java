@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import static academia.tilldawn.Utilities.*;
+
 import java.util.Iterator;
 
 
@@ -37,13 +39,13 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 
 		// starts graphic representations
-		background = new TextureRegion(new Texture("background.jpg"), 0, 0, 1920, 800);
+		background = new TextureRegion(new Texture("map-bkg.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 		dronePic = new Texture(Gdx.files.internal("drone.png"));
 		evilDronePic = new Texture(Gdx.files.internal("evil-drone.png"));
 
 		camera = new OrthographicCamera();
 
-		camera.setToOrtho(false, 1200, 800);
+		camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 
 		batch = new SpriteBatch();
 
@@ -51,8 +53,8 @@ public class Game extends ApplicationAdapter {
 		drone = new Rectangle();
 		drone.x = 800/2 - 64/2;
 		drone.y = 480/2;
-		drone.width = 64;
-        drone.height = 64;
+		drone.width = PICTURE_SIZE;
+        drone.height = PICTURE_SIZE;
 
 		evilDrones = new Array<EvilDrone>();
 
@@ -63,7 +65,6 @@ public class Game extends ApplicationAdapter {
 		EvilDrone evilDrone = new EvilDrone(drone);
 		evilDrones.add(evilDrone);
 		lastDropTime = TimeUtils.nanoTime();
-
 	}
 
 
@@ -96,7 +97,7 @@ public class Game extends ApplicationAdapter {
 
 		// Horizontal bounds
 		if (drone.x < 0) drone.x = 0;
-		if (drone.x > 1920 - 64) drone.x = 1920 - 64;
+		if (drone.x > BACKGROUND_WIDTH - PICTURE_SIZE) drone.x = BACKGROUND_WIDTH - PICTURE_SIZE;
 
 		// Player move up
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -110,21 +111,19 @@ public class Game extends ApplicationAdapter {
 
 		// Vertical bounds
 		if (drone.y < 0) drone.y = 0;
-		if (drone.y > 800 - 64) drone.y = 800 - 64;
+		if (drone.y > BACKGROUND_HEIGHT - 64) drone.y = BACKGROUND_HEIGHT - 64;
 
 
 
 		//move camera horizontally
-		if (drone.x > 600 - 64/2 && drone.x < 1320 - 64/2) {
-			camera.position.set(drone.getX() + 64/2, camera.position.y, 0);
+		if (drone.x > VIEWPORT_WIDTH/2 - PICTURE_SIZE/2 && drone.x < (BACKGROUND_WIDTH - VIEWPORT_WIDTH/2) - PICTURE_SIZE/2) {
+			camera.position.set(drone.getX() + PICTURE_SIZE/2, camera.position.y, 0);
 		}
 
 		//move camera vertically
-		/*
-		if (drone.y > 240 && drone.y < 560){
+		if (drone.y > VIEWPORT_HEIGHT/2 && drone.y < BACKGROUND_HEIGHT - VIEWPORT_HEIGHT/2){
 			camera.position.set(camera.position.x, drone.getY(),0);
 		}
-		*/
 
 		if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
