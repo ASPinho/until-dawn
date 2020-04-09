@@ -2,13 +2,29 @@ package academia.tilldawn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.math.MathUtils;
+
 import com.badlogic.gdx.math.Rectangle;
 
 public class EvilDrone {
 
+    private boolean isDistroied = false;
+    private boolean fireShot = false;
+
+    private Texture shotPic;
+
     private Rectangle rectangle;
     private Rectangle player;
+    private Rectangle shot;
+
+    float lastX;
+    float lastY;
+    float playerLastX;
+    float playerLastY;
+
 
     public EvilDrone(Rectangle player) {
         this.rectangle = new Rectangle();
@@ -17,6 +33,8 @@ public class EvilDrone {
         rectangle.width = Utilities.PICTURE_SIZE;
         rectangle.height = Utilities.PICTURE_SIZE;
         this.player = player;
+        shotPic = new Texture("shot2.png");
+        shot = new Rectangle();
     }
 
     public Rectangle getRectangle() {
@@ -72,6 +90,10 @@ public class EvilDrone {
 
         return distance > 0 ? Directions.DOWN : Directions.UP;
     }
+
+
+
+
 
 
 }

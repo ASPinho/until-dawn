@@ -16,4 +16,6 @@ public class Utilities {
     public static final int PLAYER_SPEED = 200;
     public static final int ENEMY_SPEED = 100;
 
+    public static final int PROJECTILE_SPEED = 200;
+
 }
