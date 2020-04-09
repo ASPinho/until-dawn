@@ -6,23 +6,20 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class EvilDrone {
 
-    private Texture texture;
     private Rectangle rectangle;
-
     private Rectangle player;
 
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
-
     public EvilDrone(Rectangle player) {
-        this.texture = new Texture(Gdx.files.internal("evil-drone.png"));
         this.rectangle = new Rectangle();
         rectangle.x = 1200;
         rectangle.y = 600;
         rectangle.width = 64;
         rectangle.height = 64;
         this.player = player;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
     }
 
     public void moveTowardsPlayer(){
