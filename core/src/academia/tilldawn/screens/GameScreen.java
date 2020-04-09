@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -29,10 +31,13 @@ public class GameScreen implements Screen {
     private Texture dronePic;
     private Texture evilDronePic;
     private Texture beaconPic;
+    private Texture targetPic;
 
     private Rectangle drone;
+    private Rectangle target;
     private Array<EvilDrone> evilDrones;
     private Beacon beacon;
+    private Sprite arrow;
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -51,6 +56,7 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
+        targetPic = new Texture(Gdx.files.internal("toillete.png"));
 
         camera = new OrthographicCamera();
 
@@ -65,10 +71,18 @@ public class GameScreen implements Screen {
         drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
+        target = new Rectangle();
+        target.x = PICTURE_SIZE*25;
+        target.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE*50;
+        target.width = PICTURE_SIZE;
+        target.height = PICTURE_SIZE;
+
+
+
         evilDrones = new Array<EvilDrone>();
-
-
         beacon = new Beacon(camera);
+
+        arrow = new Sprite(beaconPic);
 
         yourScoreName = "SCORE: 0";
         hp = new BitmapFont();
@@ -91,6 +105,27 @@ public class GameScreen implements Screen {
         batch.draw(background, 0, 0);
         batch.draw(dronePic, drone.x, drone.y);
         batch.draw(beaconPic, beacon.getX(), beacon.getY());
+
+        batch.draw(targetPic, target.x, target.y);
+
+
+        arrow.setSize(20,20);
+        arrow.setPosition(drone.x, drone.y - arrow.getHeight()/2 - 25);
+
+        float xInput = target.x;
+        float yInput = target.y;
+
+        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x +40);
+
+        if(angle < 0){
+            angle += 360;
+        }
+        arrow.setRotation(angle);
+
+
+        arrow.draw(batch);
+
+
 
         yourBitmapFontName.setColor(Color.GREEN);
         yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
