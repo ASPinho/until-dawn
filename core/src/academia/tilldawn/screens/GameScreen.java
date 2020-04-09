@@ -4,6 +4,7 @@ import academia.tilldawn.Beacon;
 import academia.tilldawn.Boss;
 import academia.tilldawn.Dronnie;
 import academia.tilldawn.EvilDrone;
+import academia.tilldawn.projectiles.EvilProjectile;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.util.Iterator;
+
 import static academia.tilldawn.Utilities.*;
 import static academia.tilldawn.Utilities.PICTURE_SIZE;
 
@@ -37,7 +40,11 @@ public class GameScreen implements Screen {
     private Rectangle drone;
     private Rectangle target;
     private Array<EvilDrone> evilDrones;
+
+    private Array<EvilProjectile> evilProjectiles;
+
     private Array<Boss> bosses;
+
     private Beacon beacon;
     private Sprite arrow;
 
@@ -49,6 +56,7 @@ public class GameScreen implements Screen {
     private BitmapFont hp;
 
     private long lastDropTime;
+    private long lastShootTime;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -74,15 +82,18 @@ public class GameScreen implements Screen {
         drone.height = PICTURE_SIZE;
 
         target = new Rectangle();
-        target.x = PICTURE_SIZE*25;
-        target.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE*50;
+        target.x = PICTURE_SIZE * 25;
+        target.y = BACKGROUND_HEIGHT / 2 - PICTURE_SIZE * 50;
         target.width = PICTURE_SIZE;
         target.height = PICTURE_SIZE;
 
 
-
         evilDrones = new Array<EvilDrone>();
+
+        evilProjectiles = new Array<EvilProjectile>();
+
         bosses = new Array<Boss>();
+
 
         beacon = new Beacon(camera);
 
@@ -94,7 +105,6 @@ public class GameScreen implements Screen {
     }
 
 
-
     @Override
     public void show() {
 
@@ -103,6 +113,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         camera.update();
+
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -113,20 +125,26 @@ public class GameScreen implements Screen {
         batch.draw(targetPic, target.x, target.y);
 
 
-        arrow.setSize(20,20);
-        arrow.setPosition(drone.x, drone.y - arrow.getHeight()/2 - 25);
+        arrow.setSize(20, 20);
+        arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
 
         float xInput = target.x;
         float yInput = target.y;
 
-        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x +40);
+        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x + 40);
 
-        if(angle < 0){
+        if (angle < 0) {
             angle += 360;
         }
         arrow.setRotation(angle);
 
         arrow.draw(batch);
+
+
+
+
+       
+
 
         yourBitmapFontName.setColor(Color.GREEN);
         yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
@@ -138,6 +156,18 @@ public class GameScreen implements Screen {
         for (EvilDrone raindrop : evilDrones) {
             batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
             raindrop.moveTowardsPlayer();
+            spwanShootDrop(raindrop, drone);
+        }
+
+        for (Iterator<EvilProjectile> iter = evilProjectiles.iterator(); iter.hasNext(); ) {
+            EvilProjectile evilProjectile = iter.next();
+            batch.draw(evilProjectile.getTexture(), evilProjectile.getX(), evilProjectile.getY());
+            evilProjectile.move();
+
+            if (TimeUtils.nanoTime() - evilProjectile.getLastShootTime() > 1000000000) {
+                iter.remove();
+                //evilProjectile.dispose();
+            }
         }
 
         // draws Johnsons
@@ -187,7 +217,6 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
 
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
     }
 
     @Override
@@ -236,6 +265,14 @@ public class GameScreen implements Screen {
         }
 
         lastDropTime = TimeUtils.nanoTime();
+    }
+
+    private void spwanShootDrop(EvilDrone evilDrone, Rectangle player) {
+
+
+        EvilProjectile evilProjectile = new EvilProjectile(evilDrone, player);
+        evilProjectiles.add(evilProjectile);
+        lastShootTime = TimeUtils.nanoTime();
     }
 
 }
