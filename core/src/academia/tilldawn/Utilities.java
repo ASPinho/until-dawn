@@ -4,8 +4,8 @@ public class Utilities {
 
     // Valores constantes e o caralho
 
-    public static final int BACKGROUND_WIDTH = 7280;
-    public static final int BACKGROUND_HEIGHT = 4096;
+    public static final int BACKGROUND_WIDTH = 6000;
+    public static final int BACKGROUND_HEIGHT = 4000;
 
     public static final int VIEWPORT_WIDTH = 1200;
     public static final int VIEWPORT_HEIGHT = 660;

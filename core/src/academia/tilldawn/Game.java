@@ -47,9 +47,9 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 
 		// starts graphic representations
-		background = new TextureRegion(new Texture("map-bkg.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-		dronePic = new Texture(Gdx.files.internal("drone2-32.png"));
-		evilDronePic = new Texture(Gdx.files.internal("corones.png"));
+		background = new TextureRegion(new Texture("map-bkg-medium.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+		dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
+		evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
 		beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
 
 		camera = new OrthographicCamera();
