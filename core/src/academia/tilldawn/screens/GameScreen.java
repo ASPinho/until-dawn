@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // starts graphic representations
-        background = new TextureRegion(new Texture("map-bkg-huge.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+        background = new TextureRegion(new Texture("map-bkg-02.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
