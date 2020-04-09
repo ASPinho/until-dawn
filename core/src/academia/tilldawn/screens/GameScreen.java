@@ -47,9 +47,9 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // starts graphic representations
-        background = new TextureRegion(new Texture("map-bkg.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-        dronePic = new Texture(Gdx.files.internal("drone2-32.png"));
-        evilDronePic = new Texture(Gdx.files.internal("corones.png"));
+        background = new TextureRegion(new Texture("map-bkg-huge.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+        dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
+        evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
 
         camera = new OrthographicCamera();
@@ -107,12 +107,12 @@ public class GameScreen implements Screen {
 
         // Player move left
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            drone.x -= 400 * Gdx.graphics.getDeltaTime();
+            drone.x -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
 
         // Player move right
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            drone.x += 400 * Gdx.graphics.getDeltaTime();
+            drone.x += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
 
         // Horizontal bounds
@@ -121,12 +121,12 @@ public class GameScreen implements Screen {
 
         // Player move up
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            drone.y += 400 * Gdx.graphics.getDeltaTime();
+            drone.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
 
         // Player move down
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            drone.y -= 400 * Gdx.graphics.getDeltaTime();
+            drone.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
 
         // Vertical bounds

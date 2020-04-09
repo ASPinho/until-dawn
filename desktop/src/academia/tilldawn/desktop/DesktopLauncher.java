@@ -30,6 +30,7 @@ public class DesktopLauncher extends Game {
 	public void create() {
 		skin = new Skin(Gdx.files.internal("skins/sgx/skin/glassyui/glassy-ui.json"));
 		screen = new TitleScreen(game, skin);
+		this.setScreen(screen);
 	}
 
 	@Override
