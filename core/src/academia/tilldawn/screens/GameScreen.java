@@ -1,6 +1,7 @@
 package academia.tilldawn.screens;
 
 import academia.tilldawn.Beacon;
+import academia.tilldawn.Boss;
 import academia.tilldawn.Dronnie;
 import academia.tilldawn.EvilDrone;
 import com.badlogic.gdx.Game;
@@ -36,6 +37,7 @@ public class GameScreen implements Screen {
     private Rectangle drone;
     private Rectangle target;
     private Array<EvilDrone> evilDrones;
+    private Array<Boss> bosses;
     private Beacon beacon;
     private Sprite arrow;
 
@@ -80,6 +82,8 @@ public class GameScreen implements Screen {
 
 
         evilDrones = new Array<EvilDrone>();
+        bosses = new Array<Boss>();
+
         beacon = new Beacon(camera);
 
         arrow = new Sprite(beaconPic);
@@ -122,10 +126,7 @@ public class GameScreen implements Screen {
         }
         arrow.setRotation(angle);
 
-
         arrow.draw(batch);
-
-
 
         yourBitmapFontName.setColor(Color.GREEN);
         yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
@@ -138,6 +139,13 @@ public class GameScreen implements Screen {
             batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
             raindrop.moveTowardsPlayer();
         }
+
+        // draws Johnsons
+        for (Boss boss : bosses){
+            batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
+            boss.moveTowardsPlayer();
+        }
+
         batch.end();
 
         // Player move left
@@ -204,19 +212,29 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        beaconPic.dispose();
         evilDronePic.dispose();
         dronePic.dispose();
+
+        for (Boss boss : bosses){
+            boss.dispose();
+        }
+
         batch.dispose();
     }
 
     private void spawnRaindrop() {
 
-        if (evilDrones.size >= 5) {
-            return;
+        if (evilDrones.size <= 5) {
+            EvilDrone evilDrone = new EvilDrone(drone);
+            evilDrones.add(evilDrone);
         }
 
-        EvilDrone evilDrone = new EvilDrone(drone);
-        evilDrones.add(evilDrone);
+        if (bosses.size <= 5){
+            Boss boss = new Boss(drone);
+            bosses.add(boss);
+        }
+
         lastDropTime = TimeUtils.nanoTime();
     }
 
