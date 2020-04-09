@@ -1,6 +1,4 @@
 package academia.tilldawn.screens;
-
-import academia.tilldawn.Dronnie;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -43,6 +41,7 @@ public class TitleScreen implements Screen {
                 return true;
             }
         });
+
         stage.addActor(playButton);
 
         TextButton optionsButton = new TextButton("Options",skin);

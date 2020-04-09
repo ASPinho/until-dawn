@@ -1,6 +1,4 @@
 package academia.tilldawn.screens;
-
-import academia.tilldawn.Dronnie;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
