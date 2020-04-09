@@ -1,6 +1,7 @@
 package academia.tilldawn.screens;
 
 import academia.tilldawn.Beacon;
+import academia.tilldawn.Boss;
 import academia.tilldawn.Dronnie;
 import academia.tilldawn.EvilDrone;
 import academia.tilldawn.projectiles.EvilProjectile;
@@ -39,7 +40,11 @@ public class GameScreen implements Screen {
     private Rectangle drone;
     private Rectangle target;
     private Array<EvilDrone> evilDrones;
+
     private Array<EvilProjectile> evilProjectiles;
+
+    private Array<Boss> bosses;
+
     private Beacon beacon;
     private Sprite arrow;
 
@@ -57,7 +62,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // starts graphic representations
-        background = new TextureRegion(new Texture("map-bkg-huge.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+        background = new TextureRegion(new Texture("map-bkg-02.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
@@ -84,7 +89,12 @@ public class GameScreen implements Screen {
 
 
         evilDrones = new Array<EvilDrone>();
+
         evilProjectiles = new Array<EvilProjectile>();
+
+        bosses = new Array<Boss>();
+
+
         beacon = new Beacon(camera);
 
         arrow = new Sprite(beaconPic);
@@ -127,7 +137,13 @@ public class GameScreen implements Screen {
             angle += 360;
         }
         arrow.setRotation(angle);
+
         arrow.draw(batch);
+
+
+
+
+       
 
 
         yourBitmapFontName.setColor(Color.GREEN);
@@ -153,6 +169,13 @@ public class GameScreen implements Screen {
                 //evilProjectile.dispose();
             }
         }
+
+        // draws Johnsons
+        for (Boss boss : bosses){
+            batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
+            boss.moveTowardsPlayer();
+        }
+
         batch.end();
 
         // Player move left
@@ -218,19 +241,29 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        beaconPic.dispose();
         evilDronePic.dispose();
         dronePic.dispose();
+
+        for (Boss boss : bosses){
+            boss.dispose();
+        }
+
         batch.dispose();
     }
 
     private void spawnRaindrop() {
 
-        if (evilDrones.size >= 5) {
-            return;
+        if (evilDrones.size <= 5) {
+            EvilDrone evilDrone = new EvilDrone(drone);
+            evilDrones.add(evilDrone);
         }
 
-        EvilDrone evilDrone = new EvilDrone(drone);
-        evilDrones.add(evilDrone);
+        if (bosses.size <= 5){
+            Boss boss = new Boss(drone);
+            bosses.add(boss);
+        }
+
         lastDropTime = TimeUtils.nanoTime();
     }
 

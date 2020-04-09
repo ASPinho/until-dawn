@@ -2,39 +2,27 @@ package academia.tilldawn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.math.MathUtils;
-
 import com.badlogic.gdx.math.Rectangle;
 
-public class EvilDrone {
+public class Boss {
 
-    private boolean isDistroied = false;
-    private boolean fireShot = false;
-
-    private Texture shotPic;
+    private Texture johnson;
 
     private Rectangle rectangle;
     private Rectangle player;
-    private Rectangle shot;
 
-    float lastX;
-    float lastY;
-    float playerLastX;
-    float playerLastY;
+    public Boss(Rectangle player) {
 
-
-    public EvilDrone(Rectangle player) {
-        this.rectangle = new Rectangle();
+        rectangle = new Rectangle();
         rectangle.x = MathUtils.random(Utilities.BACKGROUND_WIDTH/2);
         rectangle.y = MathUtils.random( Utilities.BACKGROUND_HEIGHT);
         rectangle.width = Utilities.PICTURE_SIZE;
         rectangle.height = Utilities.PICTURE_SIZE;
+
+        johnson = new Texture(Gdx.files.internal("b-johnson-drone-32.png"));
+
         this.player = player;
-        shotPic = new Texture("shot2.png");
-        shot = new Rectangle();
     }
 
     public Rectangle getRectangle() {
@@ -91,7 +79,21 @@ public class EvilDrone {
         return distance > 0 ? Directions.DOWN : Directions.UP;
     }
 
+    public Texture getJohnson(){
+        return johnson;
+    }
 
+    public float getX(){
+        return rectangle.x;
+    }
+
+    public float getY(){
+        return rectangle.y;
+    }
+
+    public void dispose(){
+        johnson.dispose();
+    }
 
 
 
