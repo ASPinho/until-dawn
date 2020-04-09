@@ -51,8 +51,8 @@ public class Game extends ApplicationAdapter {
 
 		// starts Player Drone logic position
 		drone = new Rectangle();
-		drone.x = 800/2 - 64/2;
-		drone.y = 480/2;
+		drone.x = PICTURE_SIZE*2;
+		drone.y = BACKGROUND_HEIGHT/2 - 64/2;
 		drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
@@ -61,6 +61,10 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void spawnRaindrop() {
+
+		if (evilDrones.size >= 5) {
+			return;
+		}
 
 		EvilDrone evilDrone = new EvilDrone(drone);
 		evilDrones.add(evilDrone);
