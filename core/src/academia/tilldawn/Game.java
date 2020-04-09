@@ -3,17 +3,23 @@ package academia.tilldawn;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
+
+import java.awt.*;
 
 import static academia.tilldawn.Utilities.*;
 
@@ -34,6 +40,11 @@ public class Game extends ApplicationAdapter {
 
 	private Array<EvilDrone> evilDrones;
 	private long lastDropTime;
+	private int score;
+	private String yourScoreName;
+	BitmapFont yourBitmapFontName;
+
+
 	
 	@Override
 	public void create () {
@@ -51,16 +62,26 @@ public class Game extends ApplicationAdapter {
 
 		// starts Player Drone logic position
 		drone = new Rectangle();
-		drone.x = 800/2 - 64/2;
-		drone.y = 480/2;
+		drone.x = PICTURE_SIZE*2;
+		drone.y = BACKGROUND_HEIGHT/2 - 64/2;
 		drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
 		evilDrones = new Array<EvilDrone>();
 
+		score = 0;
+		yourScoreName = "score: 0";
+		yourBitmapFontName = new BitmapFont();
+
+
+
 	}
 
 	private void spawnRaindrop() {
+
+		if (evilDrones.size >= 5) {
+			return;
+		}
 
 		EvilDrone evilDrone = new EvilDrone(drone);
 		evilDrones.add(evilDrone);
@@ -77,6 +98,11 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0,0 );
 		batch.draw(dronePic, drone.x, drone.y);
+
+		
+		yourBitmapFontName.setColor(Color.GREEN);
+		yourBitmapFontName.draw(batch, yourScoreName, 25, 100);
+
 
 		// draws EvilDrones in position and moves them towards PlayerDrone;
 		for(EvilDrone raindrop: evilDrones) {
