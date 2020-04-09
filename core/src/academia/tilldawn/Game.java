@@ -6,10 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -37,6 +34,7 @@ public class Game extends ApplicationAdapter {
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private Sprite arrow;
 
 	private long lastDropTime;
 	private String yourScoreName;
@@ -52,6 +50,7 @@ public class Game extends ApplicationAdapter {
 		evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
 		beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
 
+
 		camera = new OrthographicCamera();
 
 		camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -63,10 +62,12 @@ public class Game extends ApplicationAdapter {
 		drone.x = PICTURE_SIZE*2;
 		drone.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE/2;
 		drone.width = PICTURE_SIZE;
-        drone.height = PICTURE_SIZE;
+		drone.height = PICTURE_SIZE;
 
 		evilDrones = new Array<EvilDrone>();
 		beacon = new Beacon(camera);
+
+		arrow = new Sprite(beaconPic, (int)beacon.getX(), (int)beacon.getY());
 
 		yourScoreName = "SCORE: 0";
 		hp = new BitmapFont();
@@ -83,7 +84,11 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0,0 );
 		batch.draw(dronePic, drone.x, drone.y);
-		batch.draw(beaconPic, beacon.getX(), beacon.getY());
+
+		arrow.rotate(-45);
+		arrow.draw(batch);
+
+		//batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
 		yourBitmapFontName.setColor(Color.GREEN);
 		yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH/2 + 20, camera.position.y + VIEWPORT_HEIGHT/2 - 20);
