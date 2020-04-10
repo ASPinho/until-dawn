@@ -23,11 +23,11 @@ public class EvilProjectile extends AbstractProjectiles{
         bullet = new Rectangle();
         bullet.x = boss.getRectangle().x - Utilities.PICTURE_SIZE*2;
         bullet.y = boss.getRectangle().y - Utilities.PICTURE_SIZE*2;
-        bullet.width = Utilities.PICTURE_SIZE;
-        bullet.height = Utilities.PICTURE_SIZE;
+        bullet.width = 20;
+        bullet.height = 20;
         aimX = player.x;
         aimY = player.y;
-        bulletPic = new Texture(Gdx.files.internal("projectile.png"));
+        bulletPic = new Texture(Gdx.files.internal("tirinhos-02.png"));
 
         horizontally = checkHorizontalDirection();
         vertically = checkVerticalDirection();
