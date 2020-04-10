@@ -27,7 +27,7 @@ public class EvilProjectile extends AbstractProjectiles{
         bullet.height = Utilities.PICTURE_SIZE;
         aimX = player.x;
         aimY = player.y;
-        bulletPic = new Texture(Gdx.files.internal("shot2.png"));
+        bulletPic = new Texture(Gdx.files.internal("projectile.png"));
 
         horizontally = checkHorizontalDirection();
         vertically = checkVerticalDirection();
