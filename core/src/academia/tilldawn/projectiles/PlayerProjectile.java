@@ -1,5 +1,3 @@
-package academia.tilldawn.projectiles;
-
 import academia.tilldawn.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,4 +29,5 @@ public class PlayerProjectile extends AbstractProjectiles{
     public float getY(){
         return shockwave.y;
     }
+
 }

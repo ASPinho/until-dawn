@@ -2,8 +2,10 @@ package academia.tilldawn.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -28,17 +30,25 @@ public class TitleScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
 
         picture = new Texture(Gdx.files.internal("load-screen-final.jpg"));
-/*
+
         Label instructions = new Label("The blue arrow indicates the way.", skin);
         instructions.setAlignment(Align.center);
-        instructions.setY((Gdx.graphics.getHeight()*2/3) -250);
+        instructions.setY((Gdx.graphics.getHeight()-500));
         instructions.setWidth(Gdx.graphics.getWidth());
-        instructions.setFontScale(1.5f);
-        stage.addActor(instructions);*/
+        //instructions.setFontScale(1.5f);
+        stage.addActor(instructions);
+
+        Label instructions2 = new Label("Press SPACE to attack.", skin);
+        instructions2.setAlignment(Align.center);
+        instructions2.setY((Gdx.graphics.getHeight()-475));
+        instructions2.setWidth(Gdx.graphics.getWidth());
+        //instructions.setFontScale(1.5f);
+        stage.addActor(instructions2);
+
 
         TextButton playButton = new TextButton("Play!", skin);
         playButton.setWidth(Gdx.graphics.getWidth()/4);
-        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/5-playButton.getHeight()/5);
+        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/12-playButton.getHeight()/12);
 
         playButton.addListener(new InputListener() {
 
