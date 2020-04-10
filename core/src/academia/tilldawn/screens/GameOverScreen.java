@@ -3,6 +3,7 @@ package academia.tilldawn.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,10 +20,13 @@ public class GameOverScreen implements Screen {
     private Game game;
     private Texture lose;
     private SpriteBatch batch;
+    private Music corona;
 
     public GameOverScreen(final Game game, Skin skin) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
+        corona = Gdx.audio.newMusic(Gdx.files.internal("coronavirus.mp3"));
+        corona.play();
 
         Label title = new Label("GAME OVER", skin);
         title.setAlignment(Align.center);
@@ -88,6 +92,6 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        corona.dispose();
     }
 }
