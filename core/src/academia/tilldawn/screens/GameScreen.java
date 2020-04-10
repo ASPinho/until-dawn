@@ -5,6 +5,7 @@ import academia.tilldawn.Beacon;
 import academia.tilldawn.Boss;
 
 import academia.tilldawn.EvilDrone;
+import academia.tilldawn.Target;
 import academia.tilldawn.projectiles.EvilProjectile;
 import academia.tilldawn.projectiles.PlayerProjectile;
 import com.badlogic.gdx.Game;
@@ -41,7 +42,6 @@ public class GameScreen implements Screen {
     private Texture toilletPic;
 
     private Rectangle drone;
-    private Rectangle target;
     private Rectangle toillet;
     private Array<EvilDrone> evilDrones;
 
@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
     private PlayerProjectile wave;
 
     private Beacon beacon;
+    private Target target;
     private Sprite arrow;
 
     private OrthographicCamera camera;
@@ -78,7 +79,6 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        targetPic = new Texture(Gdx.files.internal("unnamed.png"));
         toilletPic = new Texture(Gdx.files.internal("toillete.png"));
 
         camera = new OrthographicCamera();
@@ -94,11 +94,6 @@ public class GameScreen implements Screen {
         drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
-        target = new Rectangle();
-        target.x = BACKGROUND_WIDTH - 800;
-        target.y = BACKGROUND_HEIGHT - 800;
-        target.width = 200;
-        target.height = 200;
 
         toillet = new Rectangle();
         toillet.x = PICTURE_SIZE * 3;
@@ -115,7 +110,8 @@ public class GameScreen implements Screen {
         bosses = new Array<Boss>();
         wave = new PlayerProjectile(drone);
 
-        beacon = new Beacon(camera);
+        beacon = new Beacon();
+        target = new Target();
 
         arrow = new Sprite(beaconPic);
 
@@ -145,15 +141,15 @@ public class GameScreen implements Screen {
         batch.draw(dronePic, drone.x, drone.y);
         batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
-        batch.draw(targetPic, target.x, target.y);
+        batch.draw(target.getTrump(), target.getX(), target.getY());
 
         batch.draw(toilletPic, toillet.x, toillet.y);
 
         arrow.setSize(20, 20);
         arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
 
-        float xInput = target.x;
-        float yInput = target.y;
+        float xInput = target.getX();
+        float yInput = target.getY();
 
         float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x + 40);
 
@@ -238,6 +234,10 @@ public class GameScreen implements Screen {
             }
         }
 
+        if (target.getPosition().overlaps(wave.getShockwave())){
+            target.takeDamage();
+        }
+
         batch.end();
 
         // Player move left
@@ -279,7 +279,9 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
 
-
+        if (target.isDead()){
+            gameWin();
+        }
 
     }
 
@@ -345,6 +347,10 @@ public class GameScreen implements Screen {
     private void gameOver() {
         //quarentine.dispose();
         game.setScreen(new GameOverScreen(game, SKIN));
+    }
+
+    private void gameWin(){
+        game.setScreen(new WinScreen(game, SKIN));
     }
 
     public void setIsInfectedTrue(){

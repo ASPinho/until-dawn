@@ -6,10 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class Beacon {
 
     private Rectangle position;
-    private Camera camera;
 
-    public Beacon(Camera camera){
-        this.camera = camera;
+    public Beacon(){
 
         position = new Rectangle();
         position.x = 20;
@@ -18,7 +16,9 @@ public class Beacon {
         position.height = Utilities.PICTURE_SIZE;
     }
 
-    public void draw(){
+
+    public Rectangle getPosition() {
+        return position;
     }
 
     public float getX(){
