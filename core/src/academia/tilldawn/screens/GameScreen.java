@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -38,9 +37,11 @@ public class GameScreen implements Screen {
     private Texture evilDronePic;
     private Texture beaconPic;
     private Texture targetPic;
+    private Texture toilletPic;
 
     private Rectangle drone;
     private Rectangle target;
+    private Rectangle toillet;
     private Array<EvilDrone> evilDrones;
 
     private Array<EvilProjectile> evilProjectiles;
@@ -60,9 +61,12 @@ public class GameScreen implements Screen {
     private int hp = 100;
     private int score = 0;
 
+    private boolean isInfected = false;
     private long lastDropTime;
+    private long infectionTime;
     private long lastShootTime;
     private Music quarentine;
+
 
     public GameScreen(Game game) {
         this.game = game;
@@ -73,6 +77,7 @@ public class GameScreen implements Screen {
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
         targetPic = new Texture(Gdx.files.internal("unnamed.png"));
+        toilletPic = new Texture(Gdx.files.internal("toillete.png"));
 
         camera = new OrthographicCamera();
 
@@ -93,6 +98,13 @@ public class GameScreen implements Screen {
         target.width = 200;
         target.height = 200;
 
+        toillet = new Rectangle();
+        toillet.x = PICTURE_SIZE * 3;
+        toillet.y = BACKGROUND_HEIGHT / 2 - PICTURE_SIZE / 2;
+        toillet.width = PICTURE_SIZE;
+        toillet.height = PICTURE_SIZE;
+
+
 
         evilDrones = new Array<EvilDrone>();
 
@@ -109,8 +121,8 @@ public class GameScreen implements Screen {
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
        // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
-        //quarentine.setLooping(true);
-        //quarentine.play();
+       // quarentine.setLooping(true);
+       // quarentine.play();
     }
 
 
@@ -133,6 +145,7 @@ public class GameScreen implements Screen {
 
         batch.draw(targetPic, target.x, target.y);
 
+        batch.draw(toilletPic, toillet.x, toillet.y);
 
         arrow.setSize(20, 20);
         arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
@@ -149,10 +162,8 @@ public class GameScreen implements Screen {
 
         arrow.draw(batch);
 
-
-
-
-       
+        infection();
+        setIsInfectedFalse();
 
 
         yourBitmapFontName.setColor(Color.GREEN);
@@ -161,10 +172,17 @@ public class GameScreen implements Screen {
         health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
 
-        // draws EvilDrones in position and moves them towards PlayerDrone;
-        for (EvilDrone raindrop : evilDrones) {
-            batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
-            raindrop.moveTowardsPlayer();
+
+
+
+        for (Iterator<EvilDrone> iter = evilDrones.iterator(); iter.hasNext();){
+            EvilDrone evilDrone = iter.next();
+            batch.draw(evilDronePic, evilDrone.getRectangle().x, evilDrone.getRectangle().y);
+            evilDrone.moveTowardsPlayer();
+            if(evilDrone.getRectangle().overlaps(drone)){
+                setIsInfectedTrue();
+                iter.remove();
+            }
         }
 
         // draws Johnsons
@@ -184,7 +202,7 @@ public class GameScreen implements Screen {
                 hp -= 10;
                 iter.remove();
                 if(hp <= 0) {
-
+                    health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
                     gameOver();
                 }
             }
@@ -298,8 +316,33 @@ public class GameScreen implements Screen {
     }
 
     private void gameOver() {
+        //quarentine.dispose();
         game.setScreen(new GameOverScreen(game, SKIN));
     }
 
+    public void setIsInfectedTrue(){
+        isInfected = true;
+    }
 
-}
+    public void setIsInfectedFalse(){
+        if(drone.overlaps(toillet)) {
+            toilletPic.dispose();
+            isInfected = false;
+        }
+    }
+
+    public void infection(){
+
+        if((isInfected) && (TimeUtils.nanoTime() - infectionTime > 1000000000)) {
+            hp -= 1;
+            infectionTime = TimeUtils.nanoTime();
+        }
+            if(hp <= 0) {
+                health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+                gameOver();
+            }
+        }
+    }
+
+
+
