@@ -6,6 +6,7 @@ import academia.tilldawn.Boss;
 
 import academia.tilldawn.EvilDrone;
 import academia.tilldawn.projectiles.EvilProjectile;
+import academia.tilldawn.projectiles.PlayerProjectile;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -46,6 +47,7 @@ public class GameScreen implements Screen {
     private Array<EvilProjectile> evilProjectiles;
 
     private Array<Boss> bosses;
+    private PlayerProjectile wave;
 
     private Beacon beacon;
     private Sprite arrow;
@@ -99,7 +101,7 @@ public class GameScreen implements Screen {
         evilProjectiles = new Array<EvilProjectile>();
 
         bosses = new Array<Boss>();
-
+        wave = new PlayerProjectile(drone);
 
         beacon = new Beacon(camera);
 
@@ -150,7 +152,11 @@ public class GameScreen implements Screen {
         arrow.draw(batch);
 
 
+        // Player attack
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE/2, drone.y - PICTURE_SIZE/2);
 
+        }
 
        
 
@@ -235,6 +241,8 @@ public class GameScreen implements Screen {
         if (drone.y > VIEWPORT_HEIGHT / 2 && drone.y < BACKGROUND_HEIGHT - VIEWPORT_HEIGHT / 2) {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
+
+
 
     }
 
