@@ -29,21 +29,21 @@ public class TitleScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
 
-        picture = new Texture(Gdx.files.internal("load-screen-final.jpg"));
+        picture = new Texture(Gdx.files.internal("load-screen-end.jpg"));
 
-        Label instructions = new Label("The blue arrow indicates the way.", skin);
+        /*Label instructions = new Label("The blue arrow indicates the way.", skin);
         instructions.setAlignment(Align.center);
         instructions.setY((Gdx.graphics.getHeight()-500));
         instructions.setWidth(Gdx.graphics.getWidth());
         //instructions.setFontScale(1.5f);
-        stage.addActor(instructions);
+        stage.addActor(instructions);*/
 
-        Label instructions2 = new Label("Press SPACE to attack.", skin);
+        /*Label instructions2 = new Label("Press SPACE to attack.", skin);
         instructions2.setAlignment(Align.center);
         instructions2.setY((Gdx.graphics.getHeight()-475));
         instructions2.setWidth(Gdx.graphics.getWidth());
         //instructions.setFontScale(1.5f);
-        stage.addActor(instructions2);
+        stage.addActor(instructions2);*/
 
 
         TextButton playButton = new TextButton("Play!", skin);
