@@ -1,3 +1,5 @@
+package academia.tilldawn.projectiles;
+
 import academia.tilldawn.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,14 +14,19 @@ public class PlayerProjectile extends AbstractProjectiles{
         shockwave = new Rectangle();
         shockwave.x = player.x;
         shockwave.y = player.y;
-        shockwave.width = Utilities.PICTURE_SIZE*2;
-        shockwave.height = Utilities.PICTURE_SIZE*2;
+        shockwave.width = Utilities.PICTURE_SIZE*4;
+        shockwave.height = Utilities.PICTURE_SIZE*4;
 
         shockwavePic = new Texture(Gdx.files.internal("player-attack.png"));
     }
 
     public Texture getShockwavePic() {
         return shockwavePic;
+    }
+
+    public void shoot(Rectangle player){
+        shockwave.x = player.x;
+        shockwave.y = player.y;
     }
 
     public float getX(){
@@ -30,4 +37,7 @@ public class PlayerProjectile extends AbstractProjectiles{
         return shockwave.y;
     }
 
+    public Rectangle getShockwave() {
+        return shockwave;
+    }
 }

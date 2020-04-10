@@ -119,7 +119,7 @@ public class GameScreen implements Screen {
 
         arrow = new Sprite(beaconPic);
 
-        yourScoreName = "SCORE: 0";
+        yourScoreName = "SCORE: ";
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
        // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
@@ -171,8 +171,8 @@ public class GameScreen implements Screen {
 
         // Player attack
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE/2, drone.y - PICTURE_SIZE/2);
-
+            wave.shoot(drone);
+            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE -16, drone.y - PICTURE_SIZE -16);
         }
 
        
@@ -180,7 +180,7 @@ public class GameScreen implements Screen {
 
 
         yourBitmapFontName.setColor(Color.GREEN);
-        yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+        yourBitmapFontName.draw(batch, yourScoreName + score, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
         health.setColor(Color.GREEN);
         health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
@@ -192,6 +192,12 @@ public class GameScreen implements Screen {
             EvilDrone evilDrone = iter.next();
             batch.draw(evilDronePic, evilDrone.getRectangle().x, evilDrone.getRectangle().y);
             evilDrone.moveTowardsPlayer();
+
+            if (evilDrone.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score += 10;
+            }
+
             if(evilDrone.getRectangle().overlaps(drone)){
                 setIsInfectedTrue();
                 iter.remove();
@@ -199,10 +205,16 @@ public class GameScreen implements Screen {
         }
 
         // draws Johnsons
-        for (Boss boss : bosses){
+        for (Iterator<Boss> iter = bosses.iterator(); iter.hasNext();){
+            Boss boss = iter.next();
             batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
             boss.moveTowardsPlayer();
             spwanShootDrop(boss, drone);
+
+            if (boss.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score +=20;
+            }
         }
 
 
@@ -307,12 +319,12 @@ public class GameScreen implements Screen {
 
     private void spawnRaindrop() {
 
-        if (evilDrones.size <= 5) {
+        if (evilDrones.size <= 10) {
             EvilDrone evilDrone = new EvilDrone(drone);
             evilDrones.add(evilDrone);
         }
 
-        if (bosses.size <= 5){
+        if (bosses.size <= 10){
             Boss boss = new Boss(drone);
             bosses.add(boss);
         }
