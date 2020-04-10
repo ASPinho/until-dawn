@@ -11,6 +11,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -58,6 +59,7 @@ public class GameScreen implements Screen {
 
     private long lastDropTime;
     private long lastShootTime;
+    private Music quarentine;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -103,6 +105,9 @@ public class GameScreen implements Screen {
         yourScoreName = "SCORE: 0";
         hp = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
+        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        quarentine.setLooping(true);
+        quarentine.play();
     }
 
 
@@ -157,8 +162,15 @@ public class GameScreen implements Screen {
         for (EvilDrone raindrop : evilDrones) {
             batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
             raindrop.moveTowardsPlayer();
-            spwanShootDrop(raindrop, drone);
         }
+
+        // draws Johnsons
+        for (Boss boss : bosses){
+            batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
+            boss.moveTowardsPlayer();
+            spwanShootDrop(boss, drone);
+        }
+
 
         for (Iterator<EvilProjectile> iter = evilProjectiles.iterator(); iter.hasNext(); ) {
             EvilProjectile evilProjectile = iter.next();
@@ -169,12 +181,6 @@ public class GameScreen implements Screen {
                 iter.remove();
                 //evilProjectile.dispose();
             }
-        }
-
-        // draws Johnsons
-        for (Boss boss : bosses){
-            batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
-            boss.moveTowardsPlayer();
         }
 
         batch.end();
@@ -245,6 +251,7 @@ public class GameScreen implements Screen {
         beaconPic.dispose();
         evilDronePic.dispose();
         dronePic.dispose();
+        quarentine.dispose();
 
         for (Boss boss : bosses){
             boss.dispose();
@@ -268,10 +275,10 @@ public class GameScreen implements Screen {
         lastDropTime = TimeUtils.nanoTime();
     }
 
-    private void spwanShootDrop(EvilDrone evilDrone, Rectangle player) {
+    private void spwanShootDrop(Boss boss, Rectangle player) {
 
 
-        EvilProjectile evilProjectile = new EvilProjectile(evilDrone, player);
+        EvilProjectile evilProjectile = new EvilProjectile(boss, player);
         evilProjectiles.add(evilProjectile);
         lastShootTime = TimeUtils.nanoTime();
     }
