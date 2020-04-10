@@ -5,7 +5,11 @@ import academia.tilldawn.Beacon;
 import academia.tilldawn.Boss;
 
 import academia.tilldawn.EvilDrone;
+
 import academia.tilldawn.Toillet;
+
+import academia.tilldawn.Target;
+
 import academia.tilldawn.projectiles.EvilProjectile;
 import academia.tilldawn.projectiles.PlayerProjectile;
 import com.badlogic.gdx.Game;
@@ -42,7 +46,9 @@ public class GameScreen implements Screen {
 
 
     private Rectangle drone;
-    private Rectangle target;
+
+   
+
 
     private Array<EvilDrone> evilDrones;
 
@@ -54,6 +60,7 @@ public class GameScreen implements Screen {
     private PlayerProjectile wave;
 
     private Beacon beacon;
+    private Target target;
     private Sprite arrow;
 
     private OrthographicCamera camera;
@@ -81,7 +88,6 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        targetPic = new Texture(Gdx.files.internal("unnamed.png"));
 
 
         camera = new OrthographicCamera();
@@ -97,11 +103,6 @@ public class GameScreen implements Screen {
         drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
-        target = new Rectangle();
-        target.x = BACKGROUND_WIDTH - 800;
-        target.y = BACKGROUND_HEIGHT - 800;
-        target.width = 200;
-        target.height = 200;
 
 
 
@@ -114,16 +115,17 @@ public class GameScreen implements Screen {
         bosses = new Array<Boss>();
         wave = new PlayerProjectile(drone);
 
-        beacon = new Beacon(camera);
+        beacon = new Beacon();
+        target = new Target();
 
         arrow = new Sprite(beaconPic);
 
-        yourScoreName = "SCORE: 0";
+        yourScoreName = "SCORE: ";
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
-       // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
-       // quarentine.setLooping(true);
-       // quarentine.play();
+        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        quarentine.setLooping(true);
+        quarentine.play();
     }
 
 
@@ -144,15 +146,15 @@ public class GameScreen implements Screen {
         batch.draw(dronePic, drone.x, drone.y);
         batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
-        batch.draw(targetPic, target.x, target.y);
+        batch.draw(target.getTrump(), target.getX(), target.getY());
 
 
 
         arrow.setSize(20, 20);
         arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
 
-        float xInput = target.x;
-        float yInput = target.y;
+        float xInput = target.getX();
+        float yInput = target.getY();
 
         float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x + 40);
 
@@ -170,8 +172,8 @@ public class GameScreen implements Screen {
 
         // Player attack
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE/2, drone.y - PICTURE_SIZE/2);
-
+            wave.shoot(drone);
+            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE -16, drone.y - PICTURE_SIZE -16);
         }
 
        
@@ -179,7 +181,7 @@ public class GameScreen implements Screen {
 
 
         yourBitmapFontName.setColor(Color.GREEN);
-        yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+        yourBitmapFontName.draw(batch, yourScoreName + score, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
         health.setColor(Color.GREEN);
         health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
@@ -191,6 +193,12 @@ public class GameScreen implements Screen {
             EvilDrone evilDrone = iter.next();
             batch.draw(evilDronePic, evilDrone.getRectangle().x, evilDrone.getRectangle().y);
             evilDrone.moveTowardsPlayer();
+
+            if (evilDrone.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score += 10;
+            }
+
             if(evilDrone.getRectangle().overlaps(drone)){
                 setIsInfectedTrue();
                 iter.remove();
@@ -209,10 +217,16 @@ public class GameScreen implements Screen {
 
 
         // draws Johnsons
-        for (Boss boss : bosses){
+        for (Iterator<Boss> iter = bosses.iterator(); iter.hasNext();){
+            Boss boss = iter.next();
             batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
             boss.moveTowardsPlayer();
             spwanShootDrop(boss, drone);
+
+            if (boss.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score +=20;
+            }
         }
 
 
@@ -234,6 +248,10 @@ public class GameScreen implements Screen {
                 iter.remove();
                 //evilProjectile.dispose();
             }
+        }
+
+        if (target.getPosition().overlaps(wave.getShockwave())){
+            target.takeDamage();
         }
 
         batch.end();
@@ -277,7 +295,9 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
 
-
+        if (target.isDead()){
+            gameWin();
+        }
 
     }
 
@@ -317,12 +337,12 @@ public class GameScreen implements Screen {
 
     private void spawnRaindrop() {
 
-        if (evilDrones.size <= 5) {
+        if (evilDrones.size <= 10) {
             EvilDrone evilDrone = new EvilDrone(drone);
             evilDrones.add(evilDrone);
         }
 
-        if (bosses.size <= 5){
+        if (bosses.size <= 10){
             Boss boss = new Boss(drone);
             bosses.add(boss);
         }
@@ -343,6 +363,10 @@ public class GameScreen implements Screen {
     private void gameOver() {
         //quarentine.dispose();
         game.setScreen(new GameOverScreen(game, SKIN));
+    }
+
+    private void gameWin(){
+        game.setScreen(new WinScreen(game, SKIN));
     }
 
     public void setIsInfectedTrue(){
