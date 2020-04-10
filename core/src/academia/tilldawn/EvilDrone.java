@@ -91,9 +91,4 @@ public class EvilDrone {
         return distance > 0 ? Directions.DOWN : Directions.UP;
     }
 
-
-
-
-
-
 }
