@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Boss {
 
     private Texture johnson;
+    private long lastShootTime = 0;
 
     private Rectangle rectangle;
     private Rectangle player;
@@ -95,7 +97,12 @@ public class Boss {
         johnson.dispose();
     }
 
+    public void shoot(){
+        lastShootTime = TimeUtils.nanoTime();
+    }
 
-
+    public long getLastShootTime(){
+        return lastShootTime;
+    }
 
 }

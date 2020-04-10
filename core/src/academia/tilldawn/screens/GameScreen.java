@@ -1,13 +1,16 @@
 package academia.tilldawn.screens;
 
 import academia.tilldawn.Beacon;
+
 import academia.tilldawn.Boss;
-import academia.tilldawn.Dronnie;
+
 import academia.tilldawn.EvilDrone;
+import academia.tilldawn.projectiles.EvilProjectile;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +23,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import java.util.Iterator;
 
 import static academia.tilldawn.Utilities.*;
 import static academia.tilldawn.Utilities.PICTURE_SIZE;
@@ -37,7 +42,11 @@ public class GameScreen implements Screen {
     private Rectangle drone;
     private Rectangle target;
     private Array<EvilDrone> evilDrones;
+
+    private Array<EvilProjectile> evilProjectiles;
+
     private Array<Boss> bosses;
+
     private Beacon beacon;
     private Sprite arrow;
 
@@ -46,9 +55,14 @@ public class GameScreen implements Screen {
 
     private String yourScoreName;
     private BitmapFont yourBitmapFontName;
-    private BitmapFont hp;
+    private BitmapFont health;
+
+    private int hp = 100;
+    private int score = 0;
 
     private long lastDropTime;
+    private long lastShootTime;
+    private Music quarentine;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -58,7 +72,7 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        targetPic = new Texture(Gdx.files.internal("toillete.png"));
+        targetPic = new Texture(Gdx.files.internal("unnamed.png"));
 
         camera = new OrthographicCamera();
 
@@ -74,25 +88,30 @@ public class GameScreen implements Screen {
         drone.height = PICTURE_SIZE;
 
         target = new Rectangle();
-        target.x = PICTURE_SIZE*25;
-        target.y = BACKGROUND_HEIGHT/2 - PICTURE_SIZE*50;
-        target.width = PICTURE_SIZE;
-        target.height = PICTURE_SIZE;
-
+        target.x = BACKGROUND_WIDTH - 800;
+        target.y = BACKGROUND_HEIGHT - 800;
+        target.width = 200;
+        target.height = 200;
 
 
         evilDrones = new Array<EvilDrone>();
+
+        evilProjectiles = new Array<EvilProjectile>();
+
         bosses = new Array<Boss>();
+
 
         beacon = new Beacon(camera);
 
         arrow = new Sprite(beaconPic);
 
         yourScoreName = "SCORE: 0";
-        hp = new BitmapFont();
+        health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
+       // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        //quarentine.setLooping(true);
+        //quarentine.play();
     }
-
 
 
     @Override
@@ -104,6 +123,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         camera.update();
 
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(background, 0, 0);
@@ -113,25 +134,31 @@ public class GameScreen implements Screen {
         batch.draw(targetPic, target.x, target.y);
 
 
-        arrow.setSize(20,20);
-        arrow.setPosition(drone.x, drone.y - arrow.getHeight()/2 - 25);
+        arrow.setSize(20, 20);
+        arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
 
         float xInput = target.x;
         float yInput = target.y;
 
-        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x +40);
+        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x + 40);
 
-        if(angle < 0){
+        if (angle < 0) {
             angle += 360;
         }
         arrow.setRotation(angle);
 
         arrow.draw(batch);
 
+
+
+
+       
+
+
         yourBitmapFontName.setColor(Color.GREEN);
         yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
-        hp.setColor(Color.GREEN);
-        hp.draw(batch, "HEALTH: 100", camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+        health.setColor(Color.GREEN);
+        health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
 
         // draws EvilDrones in position and moves them towards PlayerDrone;
@@ -144,6 +171,28 @@ public class GameScreen implements Screen {
         for (Boss boss : bosses){
             batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
             boss.moveTowardsPlayer();
+            spwanShootDrop(boss, drone);
+        }
+
+
+        for (Iterator<EvilProjectile> iter = evilProjectiles.iterator(); iter.hasNext(); ) {
+            EvilProjectile evilProjectile = iter.next();
+            batch.draw(evilProjectile.getTexture(), evilProjectile.getX(), evilProjectile.getY());
+            evilProjectile.move();
+
+            if(evilProjectile.getRectangle().overlaps(drone)) {
+                hp -= 10;
+                iter.remove();
+                if(hp <= 0) {
+
+                    gameOver();
+                }
+            }
+
+            if (TimeUtils.nanoTime() - evilProjectile.getLastShootTime() > 2000000000) {
+                iter.remove();
+                //evilProjectile.dispose();
+            }
         }
 
         batch.end();
@@ -187,7 +236,6 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
 
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
     }
 
     @Override
@@ -215,6 +263,7 @@ public class GameScreen implements Screen {
         beaconPic.dispose();
         evilDronePic.dispose();
         dronePic.dispose();
+        quarentine.dispose();
 
         for (Boss boss : bosses){
             boss.dispose();
@@ -237,5 +286,20 @@ public class GameScreen implements Screen {
 
         lastDropTime = TimeUtils.nanoTime();
     }
+
+    private void spwanShootDrop(Boss boss, Rectangle player) {
+
+        if(TimeUtils.nanoTime() - boss.getLastShootTime() > 1000000000) {
+            EvilProjectile evilProjectile = new EvilProjectile(boss, player);
+            evilProjectiles.add(evilProjectile);
+            lastShootTime = TimeUtils.nanoTime();
+            boss.shoot();
+        }
+    }
+
+    private void gameOver() {
+        game.setScreen(new GameOverScreen(game, SKIN));
+    }
+
 
 }

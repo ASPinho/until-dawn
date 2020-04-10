@@ -1,6 +1,8 @@
 package academia.tilldawn.desktop;
 import academia.tilldawn.Utilities;
+import academia.tilldawn.screens.GameOverScreen;
 import academia.tilldawn.screens.TitleScreen;
+import academia.tilldawn.screens.WinScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -23,6 +25,8 @@ public class DesktopLauncher extends Game {
 		config.title = "Game";
 		config.width = Utilities.VIEWPORT_WIDTH;
 		config.height = Utilities.VIEWPORT_HEIGHT;
+		//Important!!!
+		config.resizable = false;
 		new LwjglApplication(new DesktopLauncher(), config);
 
 	}
@@ -30,8 +34,10 @@ public class DesktopLauncher extends Game {
 	@Override
 	public void create() {
 		skin = new Skin(Gdx.files.internal("skins/sgx/skin/glassyui/glassy-ui.json"));
+
 		screen = new TitleScreen(game, skin);
 		this.setScreen(screen);
+
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package academia.tilldawn;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 public class Utilities {
 
     // Valores constantes e o caralho
@@ -15,5 +18,9 @@ public class Utilities {
 
     public static final int PLAYER_SPEED = 200;
     public static final int ENEMY_SPEED = 100;
+
+    public static final int PROJECTILE_SPEED = 200;
+
+    public static final Skin SKIN = new Skin(Gdx.files.internal("skins/sgx/skin/glassyui/glassy-ui.json"));
 
 }
