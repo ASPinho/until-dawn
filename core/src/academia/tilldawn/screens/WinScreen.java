@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class WinScreen implements Screen {
     private Stage stage;
     private Game game;
-    private Texture trophy;
+    private Texture winPic;
     private SpriteBatch batch;
 
 
@@ -24,6 +24,7 @@ public class WinScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
 
+        /*
         //comment if background has text
         Label title = new Label("VICTORY", skin);
         title.setAlignment(Align.center);
@@ -31,16 +32,16 @@ public class WinScreen implements Screen {
         title.setWidth(Gdx.graphics.getWidth());
         title.setFontScale(1.5f);
         stage.addActor(title);
-        //end
+        //end*/
 
 
-        trophy = new Texture(Gdx.files.internal("trophy.png"));
+        winPic = new Texture(Gdx.files.internal("win-screen.png"));
         batch = new SpriteBatch();
 
 
         TextButton playButton = new TextButton("Restart", skin);
-        playButton.setWidth(Gdx.graphics.getWidth()/2);
-        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/2-playButton.getHeight()/2) -150);
+        playButton.setWidth(Gdx.graphics.getWidth()/3);
+        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/4-playButton.getHeight()/4)-50);
 
         playButton.addListener(new InputListener() {
 
@@ -64,7 +65,7 @@ public class WinScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        batch.draw(trophy, 475, 150);
+        batch.draw(winPic, 0, 0);
         batch.end();
         stage.act();
         stage.draw();
@@ -92,6 +93,6 @@ public class WinScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        batch.dispose();
     }
 }

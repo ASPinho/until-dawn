@@ -27,20 +27,20 @@ public class GameOverScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
         corona = Gdx.audio.newMusic(Gdx.files.internal("coronavirus.mp3"));
         corona.play();
-
+/*
         Label title = new Label("GAME OVER", skin);
         title.setAlignment(Align.center);
         title.setY(Gdx.graphics.getHeight() * 2 / 3);
         title.setWidth(Gdx.graphics.getWidth());
         title.setFontScale(1.5f);
         stage.addActor(title);
-
-        lose = new Texture(Gdx.files.internal("youlose.png"));
+*/
+        lose = new Texture(Gdx.files.internal("lost-screen.jpg"));
         batch = new SpriteBatch();
 
         TextButton playButton = new TextButton("Try again", skin);
-        playButton.setWidth(Gdx.graphics.getWidth()/2);
-        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/2-playButton.getHeight()/2) -250);
+        playButton.setWidth(Gdx.graphics.getWidth()/3);
+        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/5-playButton.getHeight()/5));
 
         playButton.addListener(new InputListener() {
 
@@ -64,7 +64,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        batch.draw(lose, 350, 150);
+        batch.draw(lose, 0, 0);
         batch.end();
         stage.act();
         stage.draw();

@@ -2,10 +2,15 @@ package academia.tilldawn.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,39 +22,39 @@ public class TitleScreen implements Screen {
     private Stage stage;
     private Game game;
 
+    private Texture picture;
+    private SpriteBatch batch;
+
     public TitleScreen(final Game game, final Skin skin) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
 
-        Label title = new Label("Until Dawn", skin);
-        title.setAlignment(Align.center);
-        title.setY(Gdx.graphics.getHeight()*2/3);
-        title.setWidth(Gdx.graphics.getWidth());
-        title.setFontScale(2.0f);
-        stage.addActor(title);
+        picture = new Texture(Gdx.files.internal("load-screen-final.jpg"));
 
         Label instructions = new Label("The blue arrow indicates the way.", skin);
         instructions.setAlignment(Align.center);
-        instructions.setY((Gdx.graphics.getHeight()*2/3) -250);
+        instructions.setY((Gdx.graphics.getHeight()-500));
         instructions.setWidth(Gdx.graphics.getWidth());
-        instructions.setFontScale(1.5f);
+        //instructions.setFontScale(1.5f);
         stage.addActor(instructions);
 
-        Label instructions2 = new Label("Use Arrow Keys or WASD to move", skin);
+        Label instructions2 = new Label("Press SPACE to attack.", skin);
         instructions2.setAlignment(Align.center);
-        instructions2.setY((Gdx.graphics.getHeight()*2/3) -350);
+        instructions2.setY((Gdx.graphics.getHeight()-475));
         instructions2.setWidth(Gdx.graphics.getWidth());
-        instructions2.setFontScale(1.5f);
+        //instructions.setFontScale(1.5f);
         stage.addActor(instructions2);
 
+
         TextButton playButton = new TextButton("Play!", skin);
-        playButton.setWidth(Gdx.graphics.getWidth()/2);
-        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/2-playButton.getHeight()/2);
+        playButton.setWidth(Gdx.graphics.getWidth()/4);
+        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/12-playButton.getHeight()/12);
 
         playButton.addListener(new InputListener() {
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(game));
+                dispose();
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -74,6 +79,7 @@ public class TitleScreen implements Screen {
 //        });
 //        stage.addActor(optionsButton);
 
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -83,8 +89,9 @@ public class TitleScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin();
+        batch.draw(picture, 0, 0);
+        batch.end();
         stage.act();
         stage.draw();
     }
@@ -111,6 +118,8 @@ public class TitleScreen implements Screen {
 
     @Override
     public void dispose() {
+        picture.dispose();
+        batch.dispose();
 
     }
 }

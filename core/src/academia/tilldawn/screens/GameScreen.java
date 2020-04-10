@@ -5,7 +5,13 @@ import academia.tilldawn.Beacon;
 import academia.tilldawn.Boss;
 
 import academia.tilldawn.EvilDrone;
+
+import academia.tilldawn.Toillet;
+
+import academia.tilldawn.Target;
+
 import academia.tilldawn.projectiles.EvilProjectile;
+import academia.tilldawn.projectiles.PlayerProjectile;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -20,7 +26,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -39,15 +44,23 @@ public class GameScreen implements Screen {
     private Texture beaconPic;
     private Texture targetPic;
 
+
     private Rectangle drone;
-    private Rectangle target;
+
+   
+
+
     private Array<EvilDrone> evilDrones;
 
     private Array<EvilProjectile> evilProjectiles;
 
+    private Array<Toillet> toillets;
+
     private Array<Boss> bosses;
+    private PlayerProjectile wave;
 
     private Beacon beacon;
+    private Target target;
     private Sprite arrow;
 
     private OrthographicCamera camera;
@@ -60,9 +73,12 @@ public class GameScreen implements Screen {
     private int hp = 100;
     private int score = 0;
 
+    private boolean isInfected = false;
     private long lastDropTime;
+    private long infectionTime;
     private long lastShootTime;
     private Music quarentine;
+
 
     public GameScreen(Game game) {
         this.game = game;
@@ -72,7 +88,7 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        targetPic = new Texture(Gdx.files.internal("unnamed.png"));
+
 
         camera = new OrthographicCamera();
 
@@ -87,30 +103,29 @@ public class GameScreen implements Screen {
         drone.width = PICTURE_SIZE;
         drone.height = PICTURE_SIZE;
 
-        target = new Rectangle();
-        target.x = BACKGROUND_WIDTH - 800;
-        target.y = BACKGROUND_HEIGHT - 800;
-        target.width = 200;
-        target.height = 200;
 
+
+
+        toillets = new Array<Toillet>();
 
         evilDrones = new Array<EvilDrone>();
 
         evilProjectiles = new Array<EvilProjectile>();
 
         bosses = new Array<Boss>();
+        wave = new PlayerProjectile(drone);
 
-
-        beacon = new Beacon(camera);
+        beacon = new Beacon();
+        target = new Target();
 
         arrow = new Sprite(beaconPic);
 
-        yourScoreName = "SCORE: 0";
+        yourScoreName = "SCORE: ";
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
-       // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
-        //quarentine.setLooping(true);
-        //quarentine.play();
+        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        quarentine.setLooping(true);
+        quarentine.play();
     }
 
 
@@ -131,14 +146,15 @@ public class GameScreen implements Screen {
         batch.draw(dronePic, drone.x, drone.y);
         batch.draw(beaconPic, beacon.getX(), beacon.getY());
 
-        batch.draw(targetPic, target.x, target.y);
+        batch.draw(target.getTrump(), target.getX(), target.getY());
+
 
 
         arrow.setSize(20, 20);
         arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
 
-        float xInput = target.x;
-        float yInput = target.y;
+        float xInput = target.getX();
+        float yInput = target.getY();
 
         float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - drone.y, xInput - drone.x + 40);
 
@@ -150,28 +166,67 @@ public class GameScreen implements Screen {
         arrow.draw(batch);
 
 
+        infection();
 
+
+
+        // Player attack
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            wave.shoot(drone);
+            batch.draw(wave.getShockwavePic(), drone.x - PICTURE_SIZE -16, drone.y - PICTURE_SIZE -16);
+        }
 
        
 
 
+
         yourBitmapFontName.setColor(Color.GREEN);
-        yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+        yourBitmapFontName.draw(batch, yourScoreName + score, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
         health.setColor(Color.GREEN);
         health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
 
-        // draws EvilDrones in position and moves them towards PlayerDrone;
-        for (EvilDrone raindrop : evilDrones) {
-            batch.draw(evilDronePic, raindrop.getRectangle().x, raindrop.getRectangle().y);
-            raindrop.moveTowardsPlayer();
+
+
+
+        for (Iterator<EvilDrone> iter = evilDrones.iterator(); iter.hasNext();){
+            EvilDrone evilDrone = iter.next();
+            batch.draw(evilDronePic, evilDrone.getRectangle().x, evilDrone.getRectangle().y);
+            evilDrone.moveTowardsPlayer();
+
+            if (evilDrone.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score += 10;
+            }
+
+            if(evilDrone.getRectangle().overlaps(drone)){
+                setIsInfectedTrue();
+                iter.remove();
+            }
         }
 
+            spawnToillet();
+        for(Iterator<Toillet> iter = toillets.iterator(); iter.hasNext();) {
+            Toillet toillet = iter.next();
+            batch.draw(toillet.getToilletPic(), toillet.getX(), toillet.getY());
+            if(drone.overlaps(toillet.getPapper())) {
+                setIsInfectedFalse();
+                iter.remove();
+            }
+        }
+
+
         // draws Johnsons
-        for (Boss boss : bosses){
+        for (Iterator<Boss> iter = bosses.iterator(); iter.hasNext();){
+            Boss boss = iter.next();
             batch.draw(boss.getJohnson(), boss.getX(), boss.getY());
             boss.moveTowardsPlayer();
             spwanShootDrop(boss, drone);
+
+            if (boss.getRectangle().overlaps(wave.getShockwave())){
+                iter.remove();
+                score +=20;
+            }
         }
 
 
@@ -184,7 +239,8 @@ public class GameScreen implements Screen {
                 hp -= 10;
                 iter.remove();
                 if(hp <= 0) {
-
+                    health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+                    quarentine.pause();
                     gameOver();
                 }
             }
@@ -193,6 +249,10 @@ public class GameScreen implements Screen {
                 iter.remove();
                 //evilProjectile.dispose();
             }
+        }
+
+        if (target.getPosition().overlaps(wave.getShockwave())){
+            target.takeDamage();
         }
 
         batch.end();
@@ -236,6 +296,10 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, drone.getY(), 0);
         }
 
+        if (target.isDead()){
+            gameWin();
+        }
+
     }
 
     @Override
@@ -274,12 +338,12 @@ public class GameScreen implements Screen {
 
     private void spawnRaindrop() {
 
-        if (evilDrones.size <= 5) {
+        if (evilDrones.size <= 10) {
             EvilDrone evilDrone = new EvilDrone(drone);
             evilDrones.add(evilDrone);
         }
 
-        if (bosses.size <= 5){
+        if (bosses.size <= 10){
             Boss boss = new Boss(drone);
             bosses.add(boss);
         }
@@ -298,8 +362,42 @@ public class GameScreen implements Screen {
     }
 
     private void gameOver() {
+        //quarentine.dispose();
         game.setScreen(new GameOverScreen(game, SKIN));
     }
 
+    private void gameWin(){
+        game.setScreen(new WinScreen(game, SKIN));
+    }
 
-}
+    public void setIsInfectedTrue(){
+        isInfected = true;
+    }
+
+    public void setIsInfectedFalse(){
+
+            isInfected = false;
+    }
+
+    public void spawnToillet(){
+            if(toillets.size <= 20) {
+                Toillet toillet = new Toillet();
+                toillets.add(toillet);
+            }
+    }
+
+    public void infection(){
+
+        if((isInfected) && (TimeUtils.nanoTime() - infectionTime > 1000000000)) {
+            hp -= 1;
+            infectionTime = TimeUtils.nanoTime();
+        }
+            if(hp <= 0) {
+                health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+                gameOver();
+            }
+        }
+    }
+
+
+
