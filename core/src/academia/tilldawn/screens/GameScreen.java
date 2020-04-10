@@ -5,7 +5,11 @@ import academia.tilldawn.Beacon;
 import academia.tilldawn.Boss;
 
 import academia.tilldawn.EvilDrone;
+
+import academia.tilldawn.Toillet;
+
 import academia.tilldawn.Target;
+
 import academia.tilldawn.projectiles.EvilProjectile;
 import academia.tilldawn.projectiles.PlayerProjectile;
 import com.badlogic.gdx.Game;
@@ -39,13 +43,18 @@ public class GameScreen implements Screen {
     private Texture evilDronePic;
     private Texture beaconPic;
     private Texture targetPic;
-    private Texture toilletPic;
+
 
     private Rectangle drone;
-    private Rectangle toillet;
+
+   
+
+
     private Array<EvilDrone> evilDrones;
 
     private Array<EvilProjectile> evilProjectiles;
+
+    private Array<Toillet> toillets;
 
     private Array<Boss> bosses;
     private PlayerProjectile wave;
@@ -79,7 +88,7 @@ public class GameScreen implements Screen {
         dronePic = new Texture(Gdx.files.internal("bonnie-drone-32.png"));
         evilDronePic = new Texture(Gdx.files.internal("virus-32.png"));
         beaconPic = new Texture(Gdx.files.internal("arrowRight.png"));
-        toilletPic = new Texture(Gdx.files.internal("toillete.png"));
+
 
         camera = new OrthographicCamera();
 
@@ -95,13 +104,9 @@ public class GameScreen implements Screen {
         drone.height = PICTURE_SIZE;
 
 
-        toillet = new Rectangle();
-        toillet.x = PICTURE_SIZE * 3;
-        toillet.y = BACKGROUND_HEIGHT / 2 - PICTURE_SIZE / 2;
-        toillet.width = PICTURE_SIZE;
-        toillet.height = PICTURE_SIZE;
 
 
+        toillets = new Array<Toillet>();
 
         evilDrones = new Array<EvilDrone>();
 
@@ -118,9 +123,9 @@ public class GameScreen implements Screen {
         yourScoreName = "SCORE: ";
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
-       // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
-       // quarentine.setLooping(true);
-       // quarentine.play();
+        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        quarentine.setLooping(true);
+        quarentine.play();
     }
 
 
@@ -143,7 +148,7 @@ public class GameScreen implements Screen {
 
         batch.draw(target.getTrump(), target.getX(), target.getY());
 
-        batch.draw(toilletPic, toillet.x, toillet.y);
+
 
         arrow.setSize(20, 20);
         arrow.setPosition(drone.x, drone.y - arrow.getHeight() / 2 - 25);
@@ -162,7 +167,7 @@ public class GameScreen implements Screen {
 
 
         infection();
-        setIsInfectedFalse();
+
 
 
         // Player attack
@@ -199,6 +204,17 @@ public class GameScreen implements Screen {
                 iter.remove();
             }
         }
+
+            spawnToillet();
+        for(Iterator<Toillet> iter = toillets.iterator(); iter.hasNext();) {
+            Toillet toillet = iter.next();
+            batch.draw(toillet.getToilletPic(), toillet.getX(), toillet.getY());
+            if(drone.overlaps(toillet.getPapper())) {
+                setIsInfectedFalse();
+                iter.remove();
+            }
+        }
+
 
         // draws Johnsons
         for (Iterator<Boss> iter = bosses.iterator(); iter.hasNext();){
@@ -358,10 +374,15 @@ public class GameScreen implements Screen {
     }
 
     public void setIsInfectedFalse(){
-        if(drone.overlaps(toillet)) {
-            toilletPic.dispose();
+
             isInfected = false;
-        }
+    }
+
+    public void spawnToillet(){
+            if(toillets.size <= 20) {
+                Toillet toillet = new Toillet();
+                toillets.add(toillet);
+            }
     }
 
     public void infection(){

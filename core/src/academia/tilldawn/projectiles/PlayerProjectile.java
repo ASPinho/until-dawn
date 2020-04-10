@@ -1,11 +1,12 @@
 package academia.tilldawn.projectiles;
 
 import academia.tilldawn.Utilities;
+import academia.tilldawn.projectiles.AbstractProjectiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class PlayerProjectile extends AbstractProjectiles{
+public class PlayerProjectile extends AbstractProjectiles {
 
     private Rectangle shockwave;
     private Texture shockwavePic;
