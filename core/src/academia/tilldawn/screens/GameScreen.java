@@ -240,6 +240,7 @@ public class GameScreen implements Screen {
                 iter.remove();
                 if(hp <= 0) {
                     health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+                    quarentine.pause();
                     gameOver();
                 }
             }
