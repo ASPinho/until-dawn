@@ -3,7 +3,6 @@ package academia.tilldawn.screens;
 import academia.tilldawn.Beacon;
 
 import academia.tilldawn.Boss;
-import academia.tilldawn.Dronnie;
 
 import academia.tilldawn.EvilDrone;
 import academia.tilldawn.projectiles.EvilProjectile;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -55,7 +55,10 @@ public class GameScreen implements Screen {
 
     private String yourScoreName;
     private BitmapFont yourBitmapFontName;
-    private BitmapFont hp;
+    private BitmapFont health;
+
+    private int hp = 100;
+    private int score = 0;
 
     private long lastDropTime;
     private long lastShootTime;
@@ -103,11 +106,11 @@ public class GameScreen implements Screen {
         arrow = new Sprite(beaconPic);
 
         yourScoreName = "SCORE: 0";
-        hp = new BitmapFont();
+        health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
-        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
-        quarentine.setLooping(true);
-        quarentine.play();
+       // quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        //quarentine.setLooping(true);
+        //quarentine.play();
     }
 
 
@@ -154,8 +157,8 @@ public class GameScreen implements Screen {
 
         yourBitmapFontName.setColor(Color.GREEN);
         yourBitmapFontName.draw(batch, yourScoreName, camera.position.x - VIEWPORT_WIDTH / 2 + 20, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
-        hp.setColor(Color.GREEN);
-        hp.draw(batch, "HEALTH: 100", camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
+        health.setColor(Color.GREEN);
+        health.draw(batch, "HEALTH: " + hp, camera.position.x + VIEWPORT_WIDTH / 2 - 150, camera.position.y + VIEWPORT_HEIGHT / 2 - 20);
 
 
         // draws EvilDrones in position and moves them towards PlayerDrone;
@@ -177,7 +180,16 @@ public class GameScreen implements Screen {
             batch.draw(evilProjectile.getTexture(), evilProjectile.getX(), evilProjectile.getY());
             evilProjectile.move();
 
-            if (TimeUtils.nanoTime() - evilProjectile.getLastShootTime() > 1000000000) {
+            if(evilProjectile.getRectangle().overlaps(drone)) {
+                hp -= 10;
+                iter.remove();
+                if(hp <= 0) {
+
+                    gameOver();
+                }
+            }
+
+            if (TimeUtils.nanoTime() - evilProjectile.getLastShootTime() > 2000000000) {
                 iter.remove();
                 //evilProjectile.dispose();
             }
@@ -277,10 +289,17 @@ public class GameScreen implements Screen {
 
     private void spwanShootDrop(Boss boss, Rectangle player) {
 
-
-        EvilProjectile evilProjectile = new EvilProjectile(boss, player);
-        evilProjectiles.add(evilProjectile);
-        lastShootTime = TimeUtils.nanoTime();
+        if(TimeUtils.nanoTime() - boss.getLastShootTime() > 1000000000) {
+            EvilProjectile evilProjectile = new EvilProjectile(boss, player);
+            evilProjectiles.add(evilProjectile);
+            lastShootTime = TimeUtils.nanoTime();
+            boss.shoot();
+        }
     }
+
+    private void gameOver() {
+        game.setScreen(new GameOverScreen(game, SKIN));
+    }
+
 
 }

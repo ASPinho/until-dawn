@@ -21,8 +21,8 @@ public class EvilProjectile extends AbstractProjectiles{
 
     public EvilProjectile(Boss boss, Rectangle player) {
         bullet = new Rectangle();
-        bullet.x = boss.getRectangle().x;
-        bullet.y = boss.getRectangle().y;
+        bullet.x = boss.getRectangle().x - Utilities.PICTURE_SIZE*2;
+        bullet.y = boss.getRectangle().y - Utilities.PICTURE_SIZE*2;
         bullet.width = Utilities.PICTURE_SIZE;
         bullet.height = Utilities.PICTURE_SIZE;
         aimX = player.x;
@@ -103,6 +103,10 @@ public class EvilProjectile extends AbstractProjectiles{
 
     public float getY(){
         return bullet.y;
+    }
+
+    public Rectangle getRectangle() {
+        return bullet;
     }
 
 }
