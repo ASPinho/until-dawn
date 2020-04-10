@@ -1,9 +1,6 @@
 package academia.tilldawn.projectiles;
 
-import academia.tilldawn.Directions;
-import academia.tilldawn.Dronnie;
-import academia.tilldawn.EvilDrone;
-import academia.tilldawn.Utilities;
+import academia.tilldawn.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,10 +19,10 @@ public class EvilProjectile extends AbstractProjectiles{
     private float aimY;
 
 
-    public EvilProjectile(EvilDrone evilDrone, Rectangle player) {
+    public EvilProjectile(Boss boss, Rectangle player) {
         bullet = new Rectangle();
-        bullet.x = evilDrone.getRectangle().x;
-        bullet.y = evilDrone.getRectangle().y;
+        bullet.x = boss.getRectangle().x;
+        bullet.y = boss.getRectangle().y;
         bullet.width = Utilities.PICTURE_SIZE;
         bullet.height = Utilities.PICTURE_SIZE;
         aimX = player.x;
