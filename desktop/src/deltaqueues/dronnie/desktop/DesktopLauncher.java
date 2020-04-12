@@ -1,8 +1,6 @@
-package academia.tilldawn.desktop;
-import academia.tilldawn.Utilities;
-import academia.tilldawn.screens.GameOverScreen;
-import academia.tilldawn.screens.TitleScreen;
-import academia.tilldawn.screens.WinScreen;
+package deltaqueues.dronnie.desktop;
+import deltaqueues.dronnie.Utilities;
+import deltaqueues.dronnie.screens.TitleScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

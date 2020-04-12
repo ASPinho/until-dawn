@@ -1,46 +1,45 @@
-package academia.tilldawn.screens;
-
+package deltaqueues.dronnie.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class GameOverScreen implements Screen {
+public class WinScreen implements Screen {
     private Stage stage;
     private Game game;
-    private Texture lose;
+    private Texture winPic;
     private SpriteBatch batch;
-    private Music corona;
 
-    public GameOverScreen(final Game game, Skin skin) {
+
+    public WinScreen(final Game game, final Skin skin) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        corona = Gdx.audio.newMusic(Gdx.files.internal("coronavirus.mp3"));
-        corona.play();
-/*
-        Label title = new Label("GAME OVER", skin);
+
+        /*
+        //comment if background has text
+        Label title = new Label("VICTORY", skin);
         title.setAlignment(Align.center);
-        title.setY(Gdx.graphics.getHeight() * 2 / 3);
+        title.setY(Gdx.graphics.getHeight()*2/3);
         title.setWidth(Gdx.graphics.getWidth());
         title.setFontScale(1.5f);
         stage.addActor(title);
-*/
-        lose = new Texture(Gdx.files.internal("lost-screen.jpg"));
+        //end*/
+
+
+        winPic = new Texture(Gdx.files.internal("win-screen.png"));
         batch = new SpriteBatch();
 
-        TextButton playButton = new TextButton("Try again", skin);
+
+        TextButton playButton = new TextButton("Restart", skin);
         playButton.setWidth(Gdx.graphics.getWidth()/3);
-        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/5-playButton.getHeight()/5));
+        playButton.setPosition((Gdx.graphics.getWidth()/2-playButton.getWidth()/2) ,(Gdx.graphics.getHeight()/4-playButton.getHeight()/4)-50);
 
         playButton.addListener(new InputListener() {
 
@@ -64,7 +63,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void render(float delta) {
         batch.begin();
-        batch.draw(lose, 0, 0);
+        batch.draw(winPic, 0, 0);
         batch.end();
         stage.act();
         stage.draw();
@@ -92,6 +91,6 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-        corona.dispose();
+        batch.dispose();
     }
 }
