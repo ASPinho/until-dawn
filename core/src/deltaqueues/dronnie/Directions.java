@@ -1,4 +1,4 @@
-package academia.tilldawn;
+package deltaqueues.dronnie;
 
 public enum Directions {
     UP,

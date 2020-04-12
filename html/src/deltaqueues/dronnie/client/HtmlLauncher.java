@@ -1,9 +1,9 @@
-package academia.tilldawn.client;
+package deltaqueues.dronnie.client;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import academia.tilldawn.Dronnie;
+import deltaqueues.dronnie.elements.Dronnie;
 
 public class HtmlLauncher extends GwtApplication {
 
