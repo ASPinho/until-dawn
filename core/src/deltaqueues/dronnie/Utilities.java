@@ -1,4 +1,4 @@
-package academia.tilldawn;
+package deltaqueues.dronnie;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
