@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
         yourScoreName = "SCORE: ";
         health = new BitmapFont();
         yourBitmapFontName = new BitmapFont();
-        quarentine = Gdx.audio.newMusic(Gdx.files.internal("quarentine.mp3"));
+        quarentine = Gdx.audio.newMusic(Gdx.files.internal("dronnie-music.mp3"));
         quarentine.setLooping(true);
        // quarentine.play();
     }
