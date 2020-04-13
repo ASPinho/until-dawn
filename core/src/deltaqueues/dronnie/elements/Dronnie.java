@@ -2,11 +2,9 @@ package deltaqueues.dronnie.elements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import deltaqueues.dronnie.elements.enemies.FinalBoss;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import static deltaqueues.dronnie.Utilities.*;
 import static deltaqueues.dronnie.Utilities.PLAYER_SPEED;
@@ -14,6 +12,9 @@ import static deltaqueues.dronnie.Utilities.PLAYER_SPEED;
 public class Dronnie extends AbstractElements {
 
     private boolean isInfected = false;
+    private long infectionTime;
+    private int score = 0;
+    private int hp = 100;
 
     public Dronnie() {
 
@@ -60,5 +61,33 @@ public class Dronnie extends AbstractElements {
 
     public void setInfected(boolean infected) {
         isInfected = infected;
+        if(isInfected) { getSick(); }
+    }
+
+    public void getSick() {
+
+        if((TimeUtils.nanoTime() - infectionTime > 1000000000)) {
+
+        //setHp(-1);
+        takeDamage(1);
+        infectionTime = TimeUtils.nanoTime();
+        // health.setHealth(hp) <- this method will draw!
+        }
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void takeDamage(int hp) {
+        this.hp -= hp;
     }
 }

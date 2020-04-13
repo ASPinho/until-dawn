@@ -114,6 +114,8 @@ public class TitleScreen implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
+
         picture.dispose();
         batch.dispose();
 
