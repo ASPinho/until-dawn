@@ -8,6 +8,15 @@ import deltaqueues.dronnie.elements.PlayerChaser;
 
 public abstract class AbstractEnemy extends AbstractElements implements PlayerChaser {
 
+    protected boolean distroyed = false;
+
+    public boolean isDistroyed() {
+        return distroyed;
+    }
+
+    public void setDistroyed(boolean distroyed) {
+        this.distroyed = distroyed;
+    }
 
     public void moveTowardsPlayer(){
 

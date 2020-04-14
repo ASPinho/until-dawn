@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import deltaqueues.dronnie.elements.enemies.AbstractEnemy;
 
 public class Virus extends AbstractEnemy {
 

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class SimpleShot extends AbstractProjectiles {
 
     private FireType fireType;
-    
+
     private boolean losted = false;
 
     private float aimX;
@@ -69,13 +69,11 @@ public class SimpleShot extends AbstractProjectiles {
 
         if ((Math.round(body.x + body.y)) == Math.round(aimX + aimY)) {
 
-
             setIsLosted(true);
             return;
         }
 
         if (Math.round(aimX + aimY) + 20 >= Math.round(body.x + body.y)) {
-
 
             setIsLosted(true);
             return;

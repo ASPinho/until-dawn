@@ -24,7 +24,7 @@ public class GameOverScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         corona = Gdx.audio.newMusic(Gdx.files.internal("coronavirus.mp3"));
-        corona.play();
+        //corona.play();
 /*
         Label title = new Label("GAME OVER", skin);
         title.setAlignment(Align.center);

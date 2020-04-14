@@ -1,5 +1,7 @@
 package deltaqueues.dronnie.screens;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import deltaqueues.dronnie.attacks.FireType;
 import deltaqueues.dronnie.attacks.SimpleShot;
@@ -21,6 +23,7 @@ import deltaqueues.dronnie.elements.enemies.Boss;
 import deltaqueues.dronnie.elements.enemies.FinalBoss;
 import deltaqueues.dronnie.elements.enemies.Virus;
 import deltaqueues.dronnie.indicators.Health;
+import deltaqueues.dronnie.indicators.InfectedMessage;
 import deltaqueues.dronnie.indicators.Score;
 
 import java.util.Iterator;
@@ -51,6 +54,7 @@ public class GameScreen implements Screen {
 
     private Score score;
     private Health health;
+    private InfectedMessage infectedMessage;
 
     private long lastDropTime;
     private Music quarentine;
@@ -108,9 +112,6 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
-
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(background, 0, 0);
@@ -120,7 +121,7 @@ public class GameScreen implements Screen {
 
         beacon.rotate(batch);
 
-        checkInfection();
+        checkInfection(batch, camera);
 
         score.drawScore(batch, camera);
         health.drawHealth(batch, camera);
@@ -142,24 +143,30 @@ public class GameScreen implements Screen {
         for (Iterator<Virus> iter = viruses.iterator(); iter.hasNext(); ) {
             Virus virus = iter.next();
             batch.draw(virus.getBodyPic(), virus.getX(), virus.getY());
-            virus.moveTowardsPlayer();
+            if(!virus.isDistroyed()) {
+                virus.moveTowardsPlayer();
+            }
 
 
             if (virus.getBody().overlaps(wave.getBody())) {
-                iter.remove();
+                virus.setDistroyed(true);
+                virus.getBodyPic().dispose();
                 dronnie.addScore(10);
             }
 
             if (virus.getBody().overlaps(dronnie.getBody())) {
-                dronnie.setInfected(true);
-                //System.out.println(viruses.indexOf(virus, true));
-                iter.remove();
+                if(!virus.isDistroyed()) {
+                    dronnie.setInfected(true);
+                    iter.remove();
+                }
             }
             for(Iterator<SimpleShot> iter2 = evilProjectiles.iterator(); iter2.hasNext();) {
                 SimpleShot simpleShot = iter2.next();
                 if(virus.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
+
                     dronnie.addScore(10);
-                    iter.remove();
+                    virus.getBodyPic().dispose();
+                    virus.setDistroyed(true);
                 }
             }
         }
@@ -169,7 +176,10 @@ public class GameScreen implements Screen {
             Toillet toillet = iter.next();
             batch.draw(toillet.getBodyPic(), toillet.getX(), toillet.getY());
             if (dronnie.getBody().overlaps(toillet.getBody())) {
-                dronnie.setInfected(false);
+                if(dronnie.isInfected()) {
+                    dronnie.setInfected(false);
+                    infectedMessage.getWriteIndicator().dispose();
+                }
                 iter.remove();
             }
         }
@@ -179,11 +189,14 @@ public class GameScreen implements Screen {
         for (Iterator<Boss> iter = bosses.iterator(); iter.hasNext(); ) {
             Boss boss = iter.next();
             batch.draw(boss.getBodyPic(), boss.getX(), boss.getY());
+            if(!boss.isDistroyed()){
             boss.moveTowardsPlayer();
             spwanShootDrop(boss, dronnie.getBody());
+            }
 
             if (boss.getBody().overlaps(wave.getBody())) {
-                iter.remove();
+                boss.setDistroyed(true);
+                boss.getBodyPic().dispose();
                 dronnie.addScore(20);
             }
 
@@ -191,7 +204,8 @@ public class GameScreen implements Screen {
                 SimpleShot simpleShot = iter2.next();
                 if(boss.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
                     dronnie.addScore(10);
-                    iter.remove();
+                    boss.getBodyPic().dispose();
+                    boss.setDistroyed(true);
                 }
             }
 
@@ -230,6 +244,7 @@ public class GameScreen implements Screen {
             gameWin();
         }
 
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
     }
 
     @Override
@@ -276,9 +291,21 @@ public class GameScreen implements Screen {
             viruses.add(evilDrone);
         }
 
+        for (Virus virus : viruses ) {
+            if(virus.isDistroyed()) {
+                viruses.removeIndex(viruses.indexOf(virus, true));
+            }
+        }
+
         if (bosses.size <= 10) {
             Boss boss = new Boss(dronnie.getBody());
             bosses.add(boss);
+        }
+
+        for (Boss boss : bosses ) {
+            if(boss.isDistroyed()) {
+                bosses.removeIndex(bosses.indexOf(boss, true));
+            }
         }
 
         lastDropTime = TimeUtils.nanoTime();
@@ -311,10 +338,14 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void checkInfection() {
+    public void checkInfection(SpriteBatch batch, OrthographicCamera camera) {
         if (dronnie.isInfected()) {
             dronnie.getSick();
+            infectedMessage = new InfectedMessage();
+            infectedMessage.drawMessage(batch, camera);
         }
+
+
         if (dronnie.getHp() <= 0) {
             health.drawHealth(batch, camera);
             gameOver();
