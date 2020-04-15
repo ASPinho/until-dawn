@@ -54,7 +54,7 @@ public class SimpleShot extends AbstractProjectiles {
     }
 
     public void move() {
-        if (Math.round(aimX+aimY) > Math.round(body.x+body.y)) {
+        if (Math.round(aimX + aimY) > Math.round(body.x + body.y)) {
             direction2();
             return;
         }
@@ -65,13 +65,7 @@ public class SimpleShot extends AbstractProjectiles {
         dx = aimX - body.x;
         dy = aimY - body.y;
 
-        /*float*/ len = (float) Math.sqrt(dx * dx + dy * dy);
-
-        if ((Math.round(body.x + body.y)) == Math.round(aimX + aimY)) {
-
-            setIsLosted(true);
-            return;
-        }
+        len = (float) Math.sqrt(dx * dx + dy * dy);
 
         if (Math.round(aimX + aimY) + 20 >= Math.round(body.x + body.y)) {
 
@@ -85,28 +79,20 @@ public class SimpleShot extends AbstractProjectiles {
     }
 
     public void direction2() {
-       dx = aimX - body.x;
-       dy = aimY - body.y;
+        dx = aimX - body.x;
+        dy = aimY - body.y;
 
-        /*float*/ len = (float) Math.sqrt(dx * dx + dy * dy);
-
-
-        if ((Math.round(body.x + body.y)) == Math.round(aimX + aimY)) {
-
-            body.x = -1;
-            body.y = -1;
-        }
+        len = (float) Math.sqrt(dx * dx + dy * dy);
 
         if (Math.round(aimX + aimY) + 20 <= Math.round(body.x + body.y)) {
 
-            body.x = -1;
-            body.y = -1;
+
             setIsLosted(true);
             return;
         }
 
-        body.x += dx / len * 20;
-        body.y += dy / len * 20;
+        body.x += dx / len * 10;
+        body.y += dy / len * 10;
     }
 
     public FireType getFireType() {

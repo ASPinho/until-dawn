@@ -1,6 +1,6 @@
 package deltaqueues.dronnie.screens;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import deltaqueues.dronnie.attacks.FireType;
@@ -11,8 +11,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -26,6 +24,7 @@ import deltaqueues.dronnie.indicators.Health;
 import deltaqueues.dronnie.indicators.InfectedMessage;
 import deltaqueues.dronnie.indicators.Score;
 
+import java.awt.font.ShapeGraphicAttribute;
 import java.util.Iterator;
 
 import static deltaqueues.dronnie.Utilities.*;
@@ -35,6 +34,7 @@ public class GameScreen implements Screen {
 
     private Game game;
     private TextureRegion background;
+
     private Vector3 mousePos;
 
     private Dronnie dronnie;
@@ -65,7 +65,6 @@ public class GameScreen implements Screen {
 
         background = new TextureRegion(new Texture("map-bkg-02.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 
-
         camera = new OrthographicCamera();
 
         camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -92,9 +91,7 @@ public class GameScreen implements Screen {
 
         health = new Health(dronnie);
 
-
         batch = new SpriteBatch();
-
 
         quarentine = Gdx.audio.newMusic(Gdx.files.internal("dronnie-music.mp3"));
         quarentine.setLooping(true);
@@ -110,6 +107,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
@@ -118,7 +116,6 @@ public class GameScreen implements Screen {
         batch.draw(target.getBodyPic(), target.getX(), target.getY());
         batch.draw(dronnie.getBodyPic(), dronnie.getX(), dronnie.getY());
 
-
         beacon.rotate(batch);
 
         checkInfection(batch, camera);
@@ -126,7 +123,7 @@ public class GameScreen implements Screen {
         score.drawScore(batch, camera);
         health.drawHealth(batch, camera);
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
             camera.unproject(mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             SimpleShot evilProjectile1 = new SimpleShot(dronnie.getBody(), mousePos.x, mousePos.y);
@@ -149,8 +146,9 @@ public class GameScreen implements Screen {
 
 
             if (virus.getBody().overlaps(wave.getBody())) {
-                virus.setDistroyed(true);
                 virus.getBodyPic().dispose();
+                virus.getBody().setPosition(-1,-1);
+                virus.setDistroyed(true);
                 dronnie.addScore(10);
             }
 
@@ -163,9 +161,9 @@ public class GameScreen implements Screen {
             for(Iterator<SimpleShot> iter2 = evilProjectiles.iterator(); iter2.hasNext();) {
                 SimpleShot simpleShot = iter2.next();
                 if(virus.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
-
                     dronnie.addScore(10);
                     virus.getBodyPic().dispose();
+                    virus.getBody().setPosition(-1,-1);
                     virus.setDistroyed(true);
                 }
             }
@@ -190,12 +188,13 @@ public class GameScreen implements Screen {
             Boss boss = iter.next();
             batch.draw(boss.getBodyPic(), boss.getX(), boss.getY());
             if(!boss.isDistroyed()){
-            boss.moveTowardsPlayer();
-            spwanShootDrop(boss, dronnie.getBody());
+                boss.moveTowardsPlayer();
+                spwanShootDrop(boss, dronnie.getBody());
             }
 
             if (boss.getBody().overlaps(wave.getBody())) {
                 boss.setDistroyed(true);
+                boss.getBody().setPosition(-1,-1);
                 boss.getBodyPic().dispose();
                 dronnie.addScore(20);
             }
@@ -205,6 +204,7 @@ public class GameScreen implements Screen {
                 if(boss.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
                     dronnie.addScore(10);
                     boss.getBodyPic().dispose();
+                    boss.getBody().setPosition(-1,-1);
                     boss.setDistroyed(true);
                 }
             }
@@ -237,6 +237,7 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+
         dronnie.move();
         moveCamera();
 
@@ -244,7 +245,6 @@ public class GameScreen implements Screen {
             gameWin();
         }
 
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
     }
 
     @Override
@@ -363,6 +363,7 @@ public class GameScreen implements Screen {
             camera.position.set(camera.position.x, dronnie.getY(), 0);
         }
     }
+
 
 
 }
