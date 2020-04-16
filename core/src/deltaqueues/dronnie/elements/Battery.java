@@ -1,14 +1,14 @@
 package deltaqueues.dronnie.elements;
 
-import deltaqueues.dronnie.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import deltaqueues.dronnie.Utilities;
 
-public class Toillet extends AbstractElements {
+public class Battery extends AbstractElements {
 
-    public Toillet() {
+    public Battery() {
 
         body = new Rectangle();
         body.x = MathUtils.random(Utilities.BACKGROUND_WIDTH/2);
@@ -16,8 +16,9 @@ public class Toillet extends AbstractElements {
         body.width = Utilities.PICTURE_SIZE;
         body.height = Utilities.PICTURE_SIZE;
 
-        bodyPic = new Texture(Gdx.files.internal("soap.png"));
+        bodyPic = new Texture(Gdx.files.internal("battery2.png"));
 
     }
+
 
 }

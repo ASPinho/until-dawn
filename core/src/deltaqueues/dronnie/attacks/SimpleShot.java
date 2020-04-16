@@ -33,7 +33,7 @@ public class SimpleShot extends AbstractProjectiles {
         aimX = player.x;
         aimY = player.y;
 
-        bodyPic = new Texture(Gdx.files.internal("tirinhos-02.png"));
+        bodyPic = new Texture(Gdx.files.internal("evilShot.png"));
 
 
     }
@@ -86,9 +86,8 @@ public class SimpleShot extends AbstractProjectiles {
 
         if (Math.round(aimX + aimY) + 20 <= Math.round(body.x + body.y)) {
 
-
-            setIsLosted(true);
-            return;
+           setIsLosted(true);
+           return;
         }
 
         body.x += dx / len * 10;

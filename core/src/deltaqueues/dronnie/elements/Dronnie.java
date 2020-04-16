@@ -14,7 +14,7 @@ public class Dronnie extends AbstractElements {
     private boolean isInfected = false;
     private long infectionTime;
     private int score = 0;
-    private int hp = 100;
+    private int hp = 130;
 
     public Dronnie() {
 
@@ -43,6 +43,10 @@ public class Dronnie extends AbstractElements {
         // Horizontal bounds
         if (body.x < 0) body.x = 0;
         if (body.x > BACKGROUND_WIDTH - PICTURE_SIZE) body.x = BACKGROUND_WIDTH - PICTURE_SIZE;
+
+        //vertical bounds
+        if (body.y < 0) body.y = 0;
+        if (body.y > BACKGROUND_HEIGHT - 100) body.y = BACKGROUND_HEIGHT - 100;
 
         // Player move up
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -77,6 +81,14 @@ public class Dronnie extends AbstractElements {
 
     public int getScore() {
         return score;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public void addHealth(int hp){
+        this.hp += hp;
     }
 
     public void addScore(int score) {

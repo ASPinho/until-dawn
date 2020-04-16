@@ -1,8 +1,10 @@
 package deltaqueues.dronnie.screens;
 
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
+import deltaqueues.dronnie.Explosion;
+import deltaqueues.dronnie.Explosion2;
 import deltaqueues.dronnie.attacks.FireType;
 import deltaqueues.dronnie.attacks.SimpleShot;
 import deltaqueues.dronnie.attacks.PlayerProjectile;
@@ -24,7 +26,6 @@ import deltaqueues.dronnie.indicators.Health;
 import deltaqueues.dronnie.indicators.InfectedMessage;
 import deltaqueues.dronnie.indicators.Score;
 
-import java.awt.font.ShapeGraphicAttribute;
 import java.util.Iterator;
 
 import static deltaqueues.dronnie.Utilities.*;
@@ -35,6 +36,25 @@ public class GameScreen implements Screen {
     private Game game;
     private TextureRegion background;
 
+    private BitmapFont textTest;
+
+
+    private float energy = 10;
+
+    private Texture energyBar;
+    private Texture lifeBar;
+    private Texture menuSeperator;
+    private Texture menuSeperator2;
+    private Texture menuBar;
+    private Texture lifeBorder;
+    private Texture energyBorder;
+
+    private Texture wave1;
+    private Texture wave2;
+    private Texture wave3;
+    private Texture wave4;
+
+
     private Vector3 mousePos;
 
     private Dronnie dronnie;
@@ -43,7 +63,10 @@ public class GameScreen implements Screen {
     private Array<Virus> viruses;
     private Array<SimpleShot> evilProjectiles;
     private Array<Toillet> toillets;
+    private Array<Battery> batteries;
     private Array<Boss> bosses;
+    private Array<Explosion> explosions;
+    private Array<Explosion2> explosions2;
 
     private PlayerProjectile wave;
 
@@ -65,6 +88,8 @@ public class GameScreen implements Screen {
 
         background = new TextureRegion(new Texture("map-bkg-02.jpg"), 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 
+        textTest = new BitmapFont();
+
         camera = new OrthographicCamera();
 
         camera.setToOrtho(false, VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
@@ -73,15 +98,34 @@ public class GameScreen implements Screen {
 
         toillets = new Array<>();
 
+        batteries = new Array<>();
+
         viruses = new Array<>();
 
         evilProjectiles = new Array<>();
 
         bosses = new Array<>();
 
-        target = new FinalBoss();
+        explosions = new Array<Explosion>();
+
+        explosions2 = new Array<Explosion2>();
+
+        energyBar = new Texture("blank.png");
+        lifeBar = new Texture("blank.png");
+        menuBar = new Texture("blank.png");
+        menuSeperator = new Texture("blank.png");
+        menuSeperator2 = new Texture("blank.png");
+        lifeBorder = new Texture(Gdx.files.internal("barra6.png"));
+        energyBorder = new Texture(Gdx.files.internal("barra6.png"));
+
+        wave1 = new Texture(Gdx.files.internal("shockwave1.png"));
+        wave2 = new Texture(Gdx.files.internal("shockwave2.png"));
+        wave3 = new Texture(Gdx.files.internal("shockwave3.png"));
+        wave4 = new Texture(Gdx.files.internal("shockwave4.png"));
 
         dronnie = new Dronnie();
+
+        target = new FinalBoss(dronnie.getBody());
 
         beacon = new Beacon(dronnie.getBody(), target);
 
@@ -112,16 +156,12 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
         batch.draw(background, 0, 0);
+
         batch.draw(target.getBodyPic(), target.getX(), target.getY());
         batch.draw(dronnie.getBodyPic(), dronnie.getX(), dronnie.getY());
-
         beacon.rotate(batch);
-
-        checkInfection(batch, camera);
-
-        score.drawScore(batch, camera);
-        health.drawHealth(batch, camera);
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
@@ -132,8 +172,24 @@ public class GameScreen implements Screen {
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            wave.shoot();
-            batch.draw(wave.getBodyPic(), dronnie.getX() - PICTURE_SIZE - 16, dronnie.getY() - PICTURE_SIZE - 16);
+            if(energy >= 0) {
+
+                batch.draw(wave1, dronnie.getX()- PICTURE_SIZE + PICTURE_SIZE+4, dronnie.getY() + PICTURE_SIZE/2-2);
+                batch.draw(wave2, dronnie.getX()+ PICTURE_SIZE/2 - 16, dronnie.getY() + PICTURE_SIZE/2 -14);
+                batch.draw(wave3, dronnie.getX()- PICTURE_SIZE/2 , dronnie.getY()- PICTURE_SIZE/2);
+                batch.draw(wave4, dronnie.getX()- PICTURE_SIZE - 16, dronnie.getY()-PICTURE_SIZE-16);
+
+            //explosions2.add(new Explosion2(dronnie.getX(), dronnie.getY()));
+                if(dronnie.getHp() < 100) {
+                    dronnie.addHealth(1);
+                    if(dronnie.getHp() > 100){
+                        dronnie.setHp(100);
+                    }
+                }
+                wave.shoot();
+                //batch.draw(wave.getBodyPic(), dronnie.getX() - PICTURE_SIZE - 16, dronnie.getY() - PICTURE_SIZE - 16);
+                energy -=1;
+            }
         }
 
 
@@ -148,6 +204,7 @@ public class GameScreen implements Screen {
             if (virus.getBody().overlaps(wave.getBody())) {
                 virus.getBodyPic().dispose();
                 virus.getBody().setPosition(-1,-1);
+                score.covidKilled(1);
                 virus.setDistroyed(true);
                 dronnie.addScore(10);
             }
@@ -161,6 +218,8 @@ public class GameScreen implements Screen {
             for(Iterator<SimpleShot> iter2 = evilProjectiles.iterator(); iter2.hasNext();) {
                 SimpleShot simpleShot = iter2.next();
                 if(virus.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
+                    explosions2.add(new Explosion2(virus.getX(), virus.getY()));
+                    score.covidKilled(1);
                     dronnie.addScore(10);
                     virus.getBodyPic().dispose();
                     virus.getBody().setPosition(-1,-1);
@@ -169,7 +228,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        spawnToillet();
+        spawnSoapAndBatteries();
         for (Iterator<Toillet> iter = toillets.iterator(); iter.hasNext(); ) {
             Toillet toillet = iter.next();
             batch.draw(toillet.getBodyPic(), toillet.getX(), toillet.getY());
@@ -181,6 +240,19 @@ public class GameScreen implements Screen {
                 iter.remove();
             }
         }
+
+        for (Iterator<Battery> iter = batteries.iterator(); iter.hasNext(); ) {
+             Battery battery = iter.next();
+            batch.draw(battery.getBodyPic(), battery.getX(), battery.getY());
+            if (dronnie.getBody().overlaps(battery.getBody())) {
+                energy +=10;
+                if(energy >= 130) {
+                    energy = 130;
+                }
+                iter.remove();
+            }
+        }
+
 
 
         // draws Johnsons
@@ -196,12 +268,15 @@ public class GameScreen implements Screen {
                 boss.setDistroyed(true);
                 boss.getBody().setPosition(-1,-1);
                 boss.getBodyPic().dispose();
+                score.killedDrones(1);
                 dronnie.addScore(20);
             }
 
             for(Iterator<SimpleShot> iter2 = evilProjectiles.iterator(); iter2.hasNext();) {
                 SimpleShot simpleShot = iter2.next();
                 if(boss.getBody().overlaps(simpleShot.getBody()) && (simpleShot.getFireType() == FireType.PLAYER_FIRE)){
+                    explosions.add(new Explosion(boss.getX(), boss.getY()));
+                    score.killedDrones(1);
                     dronnie.addScore(10);
                     boss.getBodyPic().dispose();
                     boss.getBody().setPosition(-1,-1);
@@ -219,11 +294,19 @@ public class GameScreen implements Screen {
             }
             evilProjectile.move();
 
+            if(evilProjectile.getBody().overlaps(wave.getBody()) && evilProjectile.getFireType() == FireType.ENEMY_FIRE) {
+                iter.remove();
+            }
+
 
             if (evilProjectile.getBody().overlaps(dronnie.getBody()) && evilProjectile.getFireType() == FireType.ENEMY_FIRE) {
+                evilProjectile.setIsLosted(true);
                 dronnie.takeDamage(10);
-                iter.remove();
+                evilProjectile.getBodyPic().dispose();
+                evilProjectile.getBody().setPosition(-1,-1);
+
                 if (dronnie.getHp() <= 0) {
+                    dronnie.setHp(0);
                     health.drawHealth(batch, camera);
                     quarentine.pause();
                     gameOver();
@@ -231,9 +314,89 @@ public class GameScreen implements Screen {
             }
         }
 
+        Array<Explosion> explosionsToRemove = new Array<Explosion>();
+        for (Explosion explosion : explosions) {
+
+            explosion.update(delta*2);
+            if (explosion.remove) {
+                explosionsToRemove.add(explosion);
+            }
+        }
+
+        Array<Explosion2> explosions2ToRemove = new Array<Explosion2>();
+        for (Explosion2 explosion : explosions2) {
+
+            explosion.update(delta);
+            if (explosion.remove) {
+                explosions2ToRemove.add(explosion);
+            }
+        }
+
+        explosions.removeAll(explosionsToRemove, true);
+        explosions2.removeAll(explosions2ToRemove, true);
+
         if (target.getBody().overlaps(wave.getBody())) {
             target.takeDamage();
         }
+
+        //Explosions!
+
+        for (Explosion explosion : explosions) {
+            explosion.render(batch);
+        }
+
+        for (Explosion2 explosion : explosions2) {
+            explosion.render(batch);
+        }
+
+        // Menu, energy bar draw & colors!
+
+        batch.setColor(Color.LIGHT_GRAY);
+        batch.draw(menuSeperator,camera.position.x-VIEWPORT_WIDTH, camera.position.y+265,VIEWPORT_WIDTH *2 , camera.position.y);
+        batch.setColor(Color.WHITE);
+        batch.setColor(Color.DARK_GRAY);
+        batch.draw(menuSeperator2,camera.position.x-VIEWPORT_WIDTH, camera.position.y+271,VIEWPORT_WIDTH *2 , camera.position.y);
+        batch.setColor(Color.WHITE);
+        batch.setColor(Color.BLACK);
+        batch.draw(menuBar, camera.position.x-VIEWPORT_WIDTH, camera.position.y+275,VIEWPORT_WIDTH *2  , camera.position.y);
+
+        batch.setColor(Color.WHITE);
+        checkInfection(batch, camera);
+        score.drawScore(batch, camera);
+        health.drawHealth(batch, camera);
+
+
+        if(energy >= 90) {
+            batch.setColor(new Color(0, 1,1,1));
+        } else if(energy >= 60) {
+            batch.setColor(Color.ROYAL);
+        } else {
+            batch.setColor(Color.BLUE);
+        }
+        batch.draw(energyBar, (camera.position.x + 250), camera.position.y+290 , energy,VIEWPORT_HEIGHT/2-315);
+
+        batch.setColor(Color.FIREBRICK);
+        batch.draw(energyBorder, camera.position.x+225, camera.position.y+205);
+
+
+
+        textTest.setColor(Color.WHITE);
+
+
+        if(dronnie.getHp() >= 90) {
+            batch.setColor(Color.GREEN);
+        } else if(dronnie.getHp() >= 60 ) {
+            batch.setColor(Color.ORANGE);
+        } else {
+            batch.setColor(Color.RED);
+        }
+        batch.draw(lifeBar,camera.position.x + 441,camera.position.y+290 , dronnie.getHp(), VIEWPORT_HEIGHT/2-315);
+
+        batch.setColor(Color.ROYAL);
+        batch.draw(lifeBorder, camera.position.x+415, camera.position.y+205);
+
+
+        batch.setColor(Color.WHITE);
 
         batch.end();
 
@@ -243,6 +406,10 @@ public class GameScreen implements Screen {
 
         if (target.isDead()) {
             gameWin();
+        }
+
+        if(dronnie.getScore() > 500) {
+            target.moveTowardsPlayer();
         }
 
     }
@@ -331,10 +498,15 @@ public class GameScreen implements Screen {
         game.setScreen(new WinScreen(game, SKIN));
     }
 
-    public void spawnToillet() {
+    public void spawnSoapAndBatteries() {
         if (toillets.size <= 20) {
             Toillet toillet = new Toillet();
             toillets.add(toillet);
+        }
+
+        if(batteries.size <= 20) {
+            Battery battery = new Battery();
+            batteries.add(battery);
         }
     }
 
