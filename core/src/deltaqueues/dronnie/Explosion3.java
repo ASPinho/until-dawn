@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static deltaqueues.dronnie.ExplosionTest.SIZE;
 
+public class Explosion3 {
 
-public class Explosion2 {
-
-    private static final int FRAME_COLS = 10, FRAME_ROWS = 2;
+    private static final int FRAME_COLS = 8, FRAME_ROWS = 8;
     private static final float OFFSET = 8;
     Animation<TextureRegion> walkAnimation;
     Texture walkSheet;
@@ -23,14 +21,14 @@ public class Explosion2 {
     float x, y;
 
 
-    public Explosion2(float x, float y){
+    public Explosion3(float x, float y){
         this.x = x - OFFSET;
         this.y = y - OFFSET;
         createIdleAnimation();
     }
 
     private void createIdleAnimation() {
-        walkSheet = new Texture(Gdx.files.internal("explosion6.png"));
+        walkSheet = new Texture(Gdx.files.internal("explosion2.png"));
 
         TextureRegion[][] tmp = TextureRegion.split(walkSheet,
                 walkSheet.getWidth()/FRAME_COLS,
@@ -45,7 +43,7 @@ public class Explosion2 {
         }
 
         //walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
-        walkAnimation = new Animation<TextureRegion>(0.024f,walkFrames);
+        walkAnimation = new Animation<TextureRegion>(0.1f,walkFrames);
         stateTime = 0f;
         reg=walkAnimation.getKeyFrame(0);
     }
@@ -57,8 +55,11 @@ public class Explosion2 {
             remove = true;
     }
 
-    public void render (SpriteBatch batch) { batch.draw(walkAnimation.getKeyFrame(stateTime), x, y, SIZE, SIZE);
+    public void render (SpriteBatch batch) { batch.draw(walkAnimation.getKeyFrame(stateTime), x, y, 256, 256);
     }
+
+
+
 
 
 

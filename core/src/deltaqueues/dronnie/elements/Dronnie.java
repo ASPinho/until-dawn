@@ -15,6 +15,10 @@ public class Dronnie extends AbstractElements {
     private long infectionTime;
     private int score = 0;
     private int hp = 130;
+    private int energy = 10;
+    private boolean canHide = true;
+    private boolean invisibleMode = false;
+    private int speedBoost = 1;
 
     public Dronnie() {
 
@@ -32,12 +36,12 @@ public class Dronnie extends AbstractElements {
 
         // Player move left
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            body.x -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            body.x -= PLAYER_SPEED * Gdx.graphics.getDeltaTime() * speedBoost;
         }
 
         // Player move right
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            body.x += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            body.x += PLAYER_SPEED * Gdx.graphics.getDeltaTime() * speedBoost;
         }
 
         // Horizontal bounds
@@ -50,12 +54,12 @@ public class Dronnie extends AbstractElements {
 
         // Player move up
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            body.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            body.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime() * speedBoost;
         }
 
         // Player move down
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            body.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            body.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime() * speedBoost;
         }
     }
 
@@ -93,6 +97,9 @@ public class Dronnie extends AbstractElements {
 
     public void addScore(int score) {
         this.score += score;
+       if(this.score > 300) {
+            canHide = true;
+        }
     }
 
     public int getHp() {
@@ -101,5 +108,44 @@ public class Dronnie extends AbstractElements {
 
     public void takeDamage(int hp) {
         this.hp -= hp;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void addEnergy(int energy) {
+        this.energy += energy;
+    }
+
+    public void wasteEnergy(int energy) {
+        this.energy -= energy;
+        if(energy <= 0) {
+            setInvisibleMode(false);
+        }
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public void setInvisibleMode(boolean invisible) {
+        invisibleMode = invisible;
+    }
+
+    public boolean getCanHide() {
+        return canHide;
+    }
+
+    public boolean getInvisibleMode() {
+        return invisibleMode;
+    }
+
+    public void boost() {
+        speedBoost = 10;
+    }
+
+    public void normalSpeed(){
+        speedBoost = 1;
     }
 }

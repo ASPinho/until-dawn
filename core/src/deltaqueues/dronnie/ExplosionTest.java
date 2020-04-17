@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static deltaqueues.dronnie.ExplosionTest.SIZE;
 
 
-public class Explosion2 {
+public class ExplosionTest {
 
-    private static final int FRAME_COLS = 10, FRAME_ROWS = 2;
+    public static final int SIZE = 64;
+    private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
     private static final float OFFSET = 8;
     Animation<TextureRegion> walkAnimation;
     Texture walkSheet;
@@ -23,14 +23,14 @@ public class Explosion2 {
     float x, y;
 
 
-    public Explosion2(float x, float y){
+    public ExplosionTest(float x, float y){
         this.x = x - OFFSET;
         this.y = y - OFFSET;
         createIdleAnimation();
     }
 
     private void createIdleAnimation() {
-        walkSheet = new Texture(Gdx.files.internal("explosion6.png"));
+        walkSheet = new Texture(Gdx.files.internal("explosion9.png"));
 
         TextureRegion[][] tmp = TextureRegion.split(walkSheet,
                 walkSheet.getWidth()/FRAME_COLS,
@@ -45,7 +45,7 @@ public class Explosion2 {
         }
 
         //walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
-        walkAnimation = new Animation<TextureRegion>(0.024f,walkFrames);
+        walkAnimation = new Animation<TextureRegion>(0.05f,walkFrames);
         stateTime = 0f;
         reg=walkAnimation.getKeyFrame(0);
     }
@@ -62,4 +62,26 @@ public class Explosion2 {
 
 
 
+
+
+
+
+    /*
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        stateTime += delta;
+        reg = walkAnimation.getKeyFrame(stateTime,true);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(reg,getX(),getY(),getWidth()/2,getHeight()/2,getWidth(),getHeight(),getScaleX(),getScaleY(),getRotation());
+    }
+    */
 }
