@@ -31,7 +31,7 @@ public class DesktopLauncher extends Game {
 
 	@Override
 	public void create() {
-		skin = new Skin(Gdx.files.internal("skins/sgx/skin/glassyui/glassy-ui.json"));
+		skin = new Skin(Gdx.files.internal("/Users/codecadet/dawn/until-dawn/core/assets/skins/sgx/quantum-horizon/skin/quantum-horizon-ui.json"));
 
 		screen = new TitleScreen(game, skin);
 		this.setScreen(screen);

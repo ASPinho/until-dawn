@@ -3,7 +3,7 @@ package deltaqueues.dronnie.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 public class HtmlLauncher extends GwtApplication {
 

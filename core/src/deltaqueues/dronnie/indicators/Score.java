@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 import static deltaqueues.dronnie.Utilities.VIEWPORT_HEIGHT;
 import static deltaqueues.dronnie.Utilities.VIEWPORT_WIDTH;
@@ -31,7 +31,7 @@ public class Score extends AbstractIndicators{
         dronesScore = new BitmapFont();
         writeIndicator.setColor(Color.GREEN);
         covid = new Texture(Gdx.files.internal("covid.png"));
-        enemyDrone = new Texture(Gdx.files.internal("negativedrone4.png"));
+        enemyDrone = new Texture(Gdx.files.internal("boris.png"));
     }
 
     public void drawScore(SpriteBatch batch, OrthographicCamera camera) {
@@ -43,7 +43,7 @@ public class Score extends AbstractIndicators{
 
         batch.draw(covid,camera.position.x - 450, camera.position.y + 280);
         batch.setColor(Color.YELLOW);
-        batch.draw(enemyDrone,camera.position.x - 250, camera.position.y + 285);
+        batch.draw(enemyDrone,camera.position.x - 260, camera.position.y + 285);
         batch.setColor(Color.WHITE);
     }
 

@@ -1,0 +1,54 @@
+playermove.png
+size: 426, 402
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+climb
+  rotate: false
+  xy: 0, 134
+  size: 426, 67
+  orig: 426, 67
+  offset: 0, 0
+  index: -1
+crouch
+  rotate: false
+  xy: 0, 0
+  size: 71, 67
+  orig: 71, 67
+  offset: 0, 0
+  index: -1
+idle2
+  rotate: false
+  xy: 142, 0
+  size: 284, 67
+  orig: 284, 67
+  offset: 0, 0
+  index: -1
+jump
+  rotate: false
+  xy: 0, 67
+  size: 284, 67
+  orig: 284, 67
+  offset: 0, 0
+  index: -1
+run
+  rotate: false
+  xy: 0, 201
+  size: 213, 201
+  orig: 213, 201
+  offset: 0, 0
+  index: -1
+runShoot
+  rotate: false
+  xy: 213, 201
+  size: 213, 201
+  orig: 213, 201
+  offset: 0, 0
+  index: -1
+shoot
+  rotate: false
+  xy: 71, 0
+  size: 71, 67
+  orig: 71, 67
+  offset: 0, 0
+  index: -1

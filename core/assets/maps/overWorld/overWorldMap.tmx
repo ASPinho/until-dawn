@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="tile1" tilewidth="32" tileheight="32">
+  <image source="pipo-map001.png" width="256" height="544"/>
+ </tileset>
+ <tileset firstgid="137" name="water" tilewidth="16" tileheight="16">
+  <image source="umi.png" width="32" height="160"/>
+ </tileset>
+ <tileset firstgid="157" name="seco" tilewidth="16" tileheight="16">
+  <image source="sabaku.png" width="32" height="160"/>
+ </tileset>
+ <tileset firstgid="177" name="floresta" tilewidth="16" tileheight="16">
+  <image source="mori.png" width="256" height="192"/>
+ </tileset>
+ <tileset firstgid="369" name="meioSeco" tilewidth="16" tileheight="16">
+  <image source="pipo-map001_at-sabaku.png" width="256" height="192"/>
+ </tileset>
+ <tileset firstgid="561" name="montanhas" tilewidth="16" tileheight="16">
+  <image source="pipo-map001_at-yama3.png" width="256" height="192"/>
+ </tileset>
+ <tileset firstgid="753" name="vales" tilewidth="16" tileheight="16">
+  <image source="pipo-map001_at-yama2.png" width="256" height="192"/>
+ </tileset>
+ <tileset firstgid="945" name="city1" tilewidth="16" tileheight="16">
+  <image source="city1.png" width="775" height="422"/>
+ </tileset>
+ <tileset firstgid="2193" name="city2" tilewidth="16" tileheight="16">
+  <image source="city2.png" width="1280" height="698"/>
+ </tileset>
+ <layer name="Background" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztmEluwzAMRZXsOly8CLpogaLIcIUM1+lwgQ4X6LCoAoTA7zcp07YseREDBG0hCf7TJ6kk2xDCNsbulPF+d4oDBb9mS+/lmDnjeN3GWFKsYqzhfgX3klk767EYdqHJ3lc/c6wplnQvXBvIrF0y6z8QWy4PmGMR45F0Igv7YPkhOvaG/rEYhAM92cDesx/sS5sPuLYfkUGrrQ2xiD9LeEY/uGfFC6yhEgxWbQmLxiGZvcB6Ks2AtbUgvcKCPa/5wbNIY9D052TQWNAX7BVh0+YVM6UYcmv39Dzuf2peTYWBewU9sLJW96V6oY8nKT9k76fEgCzIYeV9aM4jPPtq6bc4LD+YoWY/DPUDGZ7im59jvMR4ndVnuInx4PCDPZgah3yP984r4XiLH/Ae4yPGZ2GOYHBo57fmB/bCV/yA7xg/MX4LcbB+q6a6+HExD+EyxlWM63k9BvECa0rzQXLts0HjsGoq5UdtDr7H7Dk30I9DBQbLF4ujLdfiSHnRx4/SDCHxjDw8q5iH12vpt9bQC+13uJVL15OHAb2w/l8o7UfKB7yYQTs3UudIbYZUPfHv2dQ5UkJ/iqetnuQ/3rY+GYMhhKZeXsP1o/770KwnZGg7P8ZksHRbtaRpxuex55WmzcoWB2v2fq8a6gde1npQ1rkf7kLzvPPs/xA/NN1a7Xs+B+erNp+836u8fnh0del59AD1e8/trn549t7LItpRv3cO5fKji0YrULvmQZ/9H9ofrJs1WqHNo5w5h+61M4bUf1vuWhOW7r5zJlfuWhO56zpn9tRG7f325BL1O3aewj7m6o8p7OfZj7MfU8y19/Hsx//8B3C2ct0=
+  </data>
+ </layer>
+ <layer name="Textures" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2LdzU0EQwOF70uCcGgoyPbEhm9AQHTty6MihJRgYOjJ/ggcqcqpINtCRaR0Atw6EhuBA+L2xbjifb58s6wTN25lvJJ3k0e5lWSl3fE0o9S0ht0vvXwyUuhQMPr9paBS+Jxdh5jYmqVRecnjeut1+X8cdargb/L8azNxdba73pL/JtIbbuDOahI3opy8H8BO/8Dvs26Tc/p3HH+hFX2oczDFpYSxa0YaLvJ5H+3wswELHPDTryKaeYnIrQSnKUI6KpNyejwIUoig1DnpMxpJnJ/l3oTtVx0raVmE11lh16Lyf4GmWdUzg+ydiEiZjCqYm5XY7zP5vRy/60J+qYy25r8N6bLDq0Pnbj6OJaeQ2HTMwE7MwOym36wj73u7/nmCwrQjFicG1sZ3HHdiJXQn3HPJRxyJyq8RiLMFSLEvK7WYNIbP/xyaGrus5vJ6bZgx81VFFbtWoQS3qUJ+U2+06Cq3+N/NfjhVGHdL891GHvf+49iM7dL8v4rESi7EES7HMkb+d7wM8xCM0oRmPs6zD3n9c+1EY9n4aRhW5VqMGtahDvbAnmfECL/EKr/EGb0eZvw67/133DT2HzP00jI20bcJmbMFWbBPWg1lTG9rxDu/xAR1CzSMNu//N81nnba9nXcdu2vdgL/ZhPw4Ic9GsqRs9+IhP+IwvKrt5FXXvM/chzVzPh3l+BA04imM4HjGv9PN+DOAnfuF3+GYwygJSEXV/MvPXa9u+Z5zBWZzDeVxIDM3Ztb8Wk3MJSlGGclQE2c0rcwzss1nX0mh8PuqeYUbU3nQP99XwvLOZV+YYuM5mXYM+E6LuGUoNP69de9MzPM8y76gw1/JAMHQc9Jlg3zPssM80197Uglbl577uinAfks42NcLvtcfDtTd1okvlbjwaVfTZJn1v1J3PtTf1ok/5H49r6u/8H8nZZofO2XXXcO1NhSgK/I6HXst6/qc72+x5E7We3wqf9/H7z44TwdA+kc42+zwYyXruED7v437rCvN3wmnhbEt3V5XuGv8yXPdse8zTzR/Xej6Zp9QpnMYZnMU5nMeFPL81SPnaY55u/rjW8z1yvY8HeIhHaEIzHnuuQ8o30/nj6o9Ocu1CN3rwEZ/wGV881yHlm8n8UY49NHw9Ll+p8ZiAiZiEyZiCqfl+65DyzWT+VAh37tXkugZVqEYNalGHes91SPlmMn+kM+AguR7CYRxBA47iGI57rkPKN5P5I50Bl8n1Cq7iGq7jBm7iluc6pHwzmT9StJBrK9rQjnd4jw/o8FxHLn6b6Sgs4B6FYpSgFGUoR0WBj+z/hnRfytWdOlfh83/FccQRRxxxxBFHHHHEEUccUfEHURr3xQ==
+  </data>
+ </layer>
+</map>

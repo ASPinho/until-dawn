@@ -43,7 +43,7 @@ public class GameOverScreen implements Screen {
         playButton.addListener(new InputListener() {
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new FinalBattleScreen(game));
                 dispose();
             }
 

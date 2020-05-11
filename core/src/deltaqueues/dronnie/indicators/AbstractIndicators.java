@@ -1,7 +1,7 @@
 package deltaqueues.dronnie.indicators;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 public abstract class AbstractIndicators {
 

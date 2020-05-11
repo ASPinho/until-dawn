@@ -1,0 +1,19 @@
+shots.png
+size: 90, 11
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+shot
+  rotate: false
+  xy: 0, 0
+  size: 45, 11
+  orig: 45, 11
+  offset: 0, 0
+  index: -1
+shotHit
+  rotate: false
+  xy: 45, 0
+  size: 45, 11
+  orig: 45, 11
+  offset: 0, 0
+  index: -1

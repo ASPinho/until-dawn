@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 public class Virus extends AbstractEnemy {
 
@@ -22,24 +22,10 @@ public class Virus extends AbstractEnemy {
 
         this.dronnie = dronnie;
         this.body = new Rectangle();
-        body.x = MathUtils.random(Utilities.BACKGROUND_WIDTH/2);
-        body.y = MathUtils.random( Utilities.BACKGROUND_HEIGHT);
+        body.x = MathUtils.random(Utilities.DRONE_BACKGROUND_WIDTH /2);
+        body.y = MathUtils.random( Utilities.DRONE_BACKGROUND_HEIGHT);
         body.width = Utilities.PICTURE_SIZE;
         body.height = Utilities.PICTURE_SIZE;
-    }
-
-    public void moveRandomly() {
-
-        if(!dronnie.getInvisibleMode()) {
-            return;
-        }
-
-        moves++;
-
-        if (moves < firstMoves  || moves % turning != 0) {
-            accelerate(chooseDirection(), speed);
-        }
-
     }
 
 }

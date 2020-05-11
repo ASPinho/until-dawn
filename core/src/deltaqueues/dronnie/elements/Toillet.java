@@ -11,8 +11,8 @@ public class Toillet extends AbstractElements {
     public Toillet() {
 
         body = new Rectangle();
-        body.x = MathUtils.random(Utilities.BACKGROUND_WIDTH/2);
-        body.y = MathUtils.random( Utilities.BACKGROUND_HEIGHT/2);
+        body.x = MathUtils.random(Utilities.DRONE_BACKGROUND_WIDTH /2);
+        body.y = MathUtils.random( Utilities.DRONE_BACKGROUND_HEIGHT /2);
         body.width = Utilities.PICTURE_SIZE;
         body.height = Utilities.PICTURE_SIZE;
 

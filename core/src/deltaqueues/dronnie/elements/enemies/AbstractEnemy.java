@@ -4,25 +4,31 @@ import com.badlogic.gdx.Gdx;
 import deltaqueues.dronnie.Directions;
 import deltaqueues.dronnie.Utilities;
 import deltaqueues.dronnie.elements.AbstractElements;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 import deltaqueues.dronnie.elements.PlayerChaser;
 
 import static deltaqueues.dronnie.Directions.*;
-import static deltaqueues.dronnie.Utilities.BACKGROUND_HEIGHT;
-import static deltaqueues.dronnie.Utilities.BACKGROUND_WIDTH;
+import static deltaqueues.dronnie.Utilities.DRONE_BACKGROUND_HEIGHT;
+import static deltaqueues.dronnie.Utilities.DRONE_BACKGROUND_WIDTH;
 
 public abstract class AbstractEnemy extends AbstractElements implements PlayerChaser {
 
-    protected boolean distroyed = false;
+    protected boolean destroyed = false;
     protected int directionChangeLevel = 8;
     public Directions currentDirection = LEFT;
     protected boolean confused = false;
+    //private Dronnie dronnie;
+    private int firstMoves = 30;
+    private int moves = 0;
+    private int turning = 4;
+    private int speed = 2;
 
-    public boolean isDistroyed() {
-        return distroyed;
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
-    public void setDistroyed(boolean distroyed) {
-        this.distroyed = distroyed;
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
     }
 
 
@@ -93,7 +99,7 @@ public abstract class AbstractEnemy extends AbstractElements implements PlayerCh
                 }
                 break;
             case RIGHT:
-                if (body.x == BACKGROUND_WIDTH - 1) {
+                if (body.x == DRONE_BACKGROUND_WIDTH - 1) {
                     return true;
                 }
                 break;
@@ -103,7 +109,7 @@ public abstract class AbstractEnemy extends AbstractElements implements PlayerCh
                 }
                 break;
             case DOWN:
-                if (body.y == BACKGROUND_HEIGHT - 1) {
+                if (body.y == DRONE_BACKGROUND_HEIGHT - 1) {
                     return true;
                 }
         }
@@ -193,4 +199,17 @@ public abstract class AbstractEnemy extends AbstractElements implements PlayerCh
         body.x += input;
     }
 
+    public void moveRandomly(Dronnie dronnie) {
+
+        if(!dronnie.getInvisibleMode()) {
+            return;
+        }
+
+        moves++;
+
+        if (moves < firstMoves  || moves % turning != 0) {
+            accelerate(chooseDirection(), speed);
+        }
+
+    }
 }

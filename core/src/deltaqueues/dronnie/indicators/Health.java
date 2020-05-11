@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 import static deltaqueues.dronnie.Utilities.VIEWPORT_HEIGHT;
 import static deltaqueues.dronnie.Utilities.VIEWPORT_WIDTH;

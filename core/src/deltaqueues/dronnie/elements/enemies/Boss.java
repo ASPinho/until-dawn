@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
-import deltaqueues.dronnie.elements.Dronnie;
+import deltaqueues.dronnie.elements.allys.Dronnie;
 
 public class Boss extends AbstractEnemy {
 
@@ -21,12 +21,12 @@ public class Boss extends AbstractEnemy {
     public Boss(Rectangle player, Dronnie dronnie) {
 
         body = new Rectangle();
-        body.x = MathUtils.random(Utilities.BACKGROUND_WIDTH/2);
-        body.y = MathUtils.random( Utilities.BACKGROUND_HEIGHT);
+        body.x = MathUtils.random(Utilities.DRONE_BACKGROUND_WIDTH /2);
+        body.y = MathUtils.random( Utilities.DRONE_BACKGROUND_HEIGHT);
         body.width = Utilities.PICTURE_SIZE;
         body.height = Utilities.PICTURE_SIZE;
 
-        bodyPic = new Texture(Gdx.files.internal("b-johnson-drone-32.png"));
+        bodyPic = new Texture(Gdx.files.internal("boris.png"));
 
         this.dronnie = dronnie;
         this.player = player;
@@ -42,19 +42,5 @@ public class Boss extends AbstractEnemy {
 
     public long getLastShootTime(){
         return lastShootTime;
-    }
-
-    public void moveRandomly() {
-
-        if(!dronnie.getInvisibleMode()) {
-            return;
-        }
-
-        moves++;
-
-        if (moves < firstMoves  || moves % turning != 0) {
-            accelerate(chooseDirection(), speed);
-        }
-
     }
 }
